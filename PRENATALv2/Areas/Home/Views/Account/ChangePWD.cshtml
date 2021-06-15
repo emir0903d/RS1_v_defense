@@ -1,0 +1,65 @@
+﻿@using PRENATALv2.Areas.Home.Models
+@{
+    Layout = "_Anonymous";
+}
+@model _changePwd
+
+    <div style="width:400px; padding:20px 20px 20px 20px;" class="container text-center">
+        <p><strong>1)Lenght:8char MIN.; 2)1Upper; 3)1lower; 4)1Digit;</strong></p>
+
+        @using (Html.BeginForm("AttemptChangePwd", "Account", FormMethod.Post, new { @class = "form-group d-inline-block", @style = "width:550px;" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset style="width:550px;" class="btn-group-vertical">
+                @Html.HiddenFor(Model => Model.UserId)
+                <div class="d-inline-flex">
+                    <label class="form-control d-inline-flex" style="width:200px;">Current password</label>
+                    @Html.TextBoxFor(Model => Model._currentPassword, "", new { @style = "width:200px;", @class = "form-control d-inline-flex", type = "Password" })
+                    @Html.ValidationMessageFor(Model => Model._currentPassword, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-inline-flex">
+                    <label class="form-control d-inline-flex" style="width:200px;">New password</label>
+                    @Html.TextBoxFor(Model => Model._newPassword, "", new { @Id = "_new", @onchange = "EnableConfirmation();", @class = "form-control d-inline-flex", @style = "width:200px;", type = "Password" })
+                    @Html.ValidationMessageFor(Model => Model._newPassword, "", new { @class = "text-danger" })
+                </div>
+                <br />
+                <div class="d-inline-flex">
+                    <label class="form-control d-inline-flex" style="width:200px;">Confirm password</label>
+                    @Html.TextBoxFor(Model => Model._confirmPassword, "", new { @Id = "_confirm", @onchange = "EnableSubmit();", @class = "form-control d-inline-flex", @style = "width:200px;", @disabled = "disabled", type = "Password" })
+                    @Html.ValidationMessageFor(Model => Model._confirmPassword, "", new { @class = "text-danger" })
+                </div>
+                <br />
+                <div class="d-inline-flex">
+                    <input style="width:400px;" id="_sub" type="submit" class="btn btn-prenatal" disabled />
+                </div>
+
+            </fieldset>
+        }
+    </div>
+<script>
+    function EnableSubmit() {
+        if ($('#_confirm').val() == "") {
+
+            $('#_sub').attr('disabled', 'disabled');
+        }
+
+        if ($('#_confirm').val() != "") {
+
+            $('#_sub').removeAttr('disabled');
+        }
+
+    }
+    function EnableConfirmation() {
+        if ($('#_new').val() == "") {
+
+            $('#_confirm').attr('disabled', 'disabled');
+        }
+
+        if ($('#_new').val() != "") {
+
+            $('#_confirm').removeAttr('disabled');
+        }
+
+    }
+</script>

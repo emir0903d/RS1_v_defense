@@ -1,0 +1,27 @@
+﻿@using PRENATALv2.Areas.Home.Models
+@model _2FAlogin
+@{
+    Layout = "_Anonymous";
+}
+
+    <div class="container">
+        <p>Your login is protected with an authenticator app. Enter your authenticator code below.</p>
+        @using (Html.BeginForm("Attempt2FAlogin", "Account", FormMethod.Post, new { @style = "width:400px;", @class = "form-group d-inline-block" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="btn-group-vertical">
+                <label style="width:200px;">Verification Code</label>
+                @Html.TextBoxFor(Model => Model.TwoFactorCode, "", new { @style = "width:200px;", @class = "form-control d-inline" })<br />
+                <label style="width:200px;">Remember Client?</label>
+                @Html.CheckBoxFor(Model => Model.RememberClient, new { @style = "width:25px;", @class = "form-control d-inline" })<br />
+
+                <input type="submit" class="btn btn-prenatal" value="Verify" />
+            </fieldset>
+
+        }
+    </div>
+<hr />
+        <p>
+            Don't have access to your authenticator device?
+            <a class="btn btn-small" href="/Home/Account/RecoveryCodeLogin">RecoveryCode-Login</a>.
+        </p>

@@ -1,0 +1,126 @@
+﻿@using PRENATALv2.Areas.Records.Models;
+@model AllergiesMR
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+        {
+            <button style="vertical-align:middle; font-size:20px;" id="_allergy_add" class="btn fas fa-plus-square d-inline"></button>
+        }
+
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Allergies:</strong></h5>
+    </div>
+
+    @{
+        if (Model.AllergyList.Count > 0)
+        {
+
+            <div class="container">
+
+
+                <div class="row row_head">
+                    <div class="col" hidden>Id</div>
+                    <div class="col">Type</div>
+                    <div class="col">Note</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+
+                    <div class="col">Actions</div>
+                </div>
+
+
+                @foreach (AllergiesMR.Details x in Model.AllergyList)
+                {
+
+                    <div class="row row_data">
+                        <div class="col" hidden>@x.Id</div>
+                        <div class="col" d>@x.Type</div>
+                        <div class="col">@x.Note</div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+
+                        <div class="col">
+                            @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                            {
+                                <i style="font-size:20px;" class="_allergy_edit fas fa-edit a_icon"></i>
+                                <a style="font-size:20px;" class="_allergy_delete fas fa-trash-alt a_icon" href="/Records/Allergies/Delete?Id=@x.Id"></a>
+                            }
+                            else
+                            {
+                                <div>N/A</div>
+                            }
+
+                        </div>
+                    </div>
+
+
+                }
+
+            </div>
+
+        }
+
+    }
+    <div class="container" id="_allergies_add"></div>
+    <div class="container" id="_allergies_edit"></div>
+</div>
+
+
+<script>
+    $('._allergy_edit').click(function () {
+        if ($('#_allergies_edit').html() == "") {
+            var i = $(this).parent().parent().children().html();
+            $.ajax({
+                url: "/Records/Allergies/Edit?Id=" + i,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_allergies_edit").html(data);
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+                }
+            });
+        } else {
+            $('#_allergies_edit').empty();
+        }
+
+    });
+    $('#_allergy_add').click(function () {
+        if ($('#_allergies_add').html() == "") {
+
+            $.ajax({
+                url: "/Records/Allergies/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_allergies_add").html(data);
+
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+
+                }
+            });
+        } else {
+            $('#_allergies_add').empty();
+        }
+    });
+</script>

@@ -1,0 +1,82 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model UltrasoundsMR.Details
+
+    <div class="container border-bottom">
+        <h3><strong class="text-uppercase">Edit ultrasound</strong></h3>
+        @using (Html.BeginForm("SaveExisting", "Ultrasounds", FormMethod.Post, new { @class = "form-group" }))
+        {
+
+            @Html.AntiForgeryToken();
+            <fieldset class="align-content-lg-around">
+
+                @Html.HiddenFor(Model => Model.MedicalRecordId, new { @class = "d-none" })
+                @Html.HiddenFor(Model => Model.Id, new { @class = "d-none" })
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Date, new { @class = "col-sm-12" })<br />
+                    @Html.EditorFor(Model => Model.Date, new { htmlAttributes = new { @type = "date", @class = " datepicker form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.Date, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.HeartBeats, new { @class = "col-sm-12" })<br />
+                    @Html.EditorFor(Model => Model.HeartBeats, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.HeartBeats, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Movement, new { @class = "col-sm-12" })<br />
+                    @Html.CheckBoxFor(Model => Model.Movement, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Movement, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Length, new { @class = "col-sm-12" })<br />
+                    @Html.EditorFor(Model => Model.Length, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.Length, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.NuchalScan, new { @class = "col-sm-12" })<br />
+                    @Html.CheckBoxFor(Model => Model.NuchalScan, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.NuchalScan, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Anomalies, new { @class = "col-sm-12" })<br />
+                    @Html.CheckBoxFor(Model => Model.Anomalies, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Anomalies, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.HeadDiameter, new { @class = "col-sm-12" })<br />
+                    @Html.EditorFor(Model => Model.HeadDiameter, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.HeadDiameter, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.HeadCircumference, new { @class = "col-sm-12" })<br />
+                    @Html.EditorFor(Model => Model.HeadCircumference, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.HeadCircumference, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.AbdominalCircumference, new { @class = "col-sm-12" })<br />
+                    @Html.EditorFor(Model => Model.AbdominalCircumference, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.AbdominalCircumference, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.FemurLength, new { @class = "col-sm-12" })<br />
+                    @Html.EditorFor(Model => Model.FemurLength, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.FemurLength, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Note, new { @class = "col-sm-12" })<br />
+                    @Html.EditorFor(Model => Model.Note, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.Note, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-inline">
+                    <button id="edit_cancel" class="btn btn-small form-control">Cancel</button>
+                    <input type="submit" class="btn btn-small form-control" value="Save" />
+                </div>
+            </fieldset>
+        }
+    </div>
+<script>
+    $('#edit_cancel').click(function () {
+        $(this).parent().parent().parent().parent().parent().empty();
+    });
+</script>

@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "_Layout";
+}
+@Html.AntiForgeryToken()
+    <div class="container">
+        @using (Html.BeginForm("Send", "SMS", FormMethod.Post))
+        {
+            <input type="text" name="to" id="to" placeholder="To" />
+            <input type="text" name="text" id="text" placeholder="Text" />
+            <input type="submit" value="Send" />
+        }
+    </div>
+
+

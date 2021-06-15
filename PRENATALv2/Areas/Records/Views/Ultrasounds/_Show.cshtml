@@ -1,0 +1,123 @@
+﻿@using PRENATALv2.Areas.Records.Models;
+@model UltrasoundsMR
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+            {
+                <button style="vertical-align:middle; font-size:20px;" id="_ultrasound_add" class="btn fas fa-plus-square d-inline"></button>
+            }
+        }
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Ultrasounds:</strong></h5>
+    </div>
+
+    @{
+        if (Model.Ultrasounds.Count > 0)
+        {
+            <div class="container">
+                <div class="row row_head">
+                    <div class="col" hidden>Id</div>
+                    <div class="col">Date</div>
+
+                    <div class="col">H.Beats</div>
+                    <div class="col">Movem.</div>
+                    <div class="col">Length</div>
+                    <div class="col">Nuchal</div>
+                    <div class="col">Anomal.</div>
+                    <div class="col">HeadDiam.</div>
+                    <div class="col">HeadCirc.</div>
+                    <div class="col">Abdom.Circ.</div>
+                    <div class="col">Femur</div>
+                    <div class="col">Note</div>
+                    <div class="col">Actions</div>
+                </div>
+
+                @foreach (UltrasoundsMR.Details x in Model.Ultrasounds)
+                {
+                    <div class="row row_data" style="border-bottom:0">
+                        <div class="col" hidden>@x.Id</div>
+                        <div class="col">@x.Date.ToShortDateString()</div>
+
+                        <div class="col">@x.HeartBeats</div>
+                        <div class="col">@x.Movement</div>
+                        <div class="col">@x.Length</div>
+                        <div class="col">@x.NuchalScan</div>
+                        <div class="col">@x.Anomalies</div>
+                        <div class="col">@x.HeadDiameter</div>
+                        <div class="col">@x.HeadCircumference</div>
+                        <div class="col">@x.AbdominalCircumference</div>
+                        <div class="col">@x.FemurLength</div>
+                        <div class="col">@x.Note</div>
+                        <div class="col">
+                            @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+                                {
+                                    
+                                    <i style="font-size:20px;" class="_ultrasound_edit fas fa-edit a_icon"></i>
+                                    <a style="font-size:20px;" class="_ultrasound_delete fas fa-trash-alt a_icon" href="/Records/Ultrasounds/Delete?Id=@x.Id"></a>
+                                }
+                                else
+                                { 
+                                    <div>N/A</div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                }
+            </div>
+
+        }
+
+    }
+    <div class="container" id="_ultrasounds_add"></div>
+    <div class="container" id="_ultrasounds_edit"></div>
+</div>
+
+
+<script>
+    $('._ultrasound_edit').click(function () {
+        if ($('#_ultrasounds_edit').html() == "") {
+            var i = $(this).parent().parent().children().html();
+            $.ajax({
+                url: "/Records/Ultrasounds/Edit?Id=" + i,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_ultrasounds_edit").html(data);
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+                }
+            });
+        } else {
+            $('#_ultrasounds_edit').empty();
+        }
+
+    });
+        $('#_ultrasound_add').click(function () {
+            if ($('#_ultrasounds_add').html() == "") {
+
+            $.ajax({
+                url: "/Records/Ultrasounds/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_ultrasounds_add").html(data);
+
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+
+                }
+            });
+        } else {
+                $('#_ultrasounds_add').empty();
+        }
+    });
+</script>

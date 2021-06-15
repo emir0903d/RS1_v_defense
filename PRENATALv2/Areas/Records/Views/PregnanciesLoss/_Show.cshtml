@@ -1,0 +1,129 @@
+﻿@using PRENATALv2.Areas.Records.Models;
+@model PregnanciesLossMR
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+
+    <div class="text-left" style="vertical-align:middle;">
+        @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+            {
+                <button style="vertical-align:middle; font-size:20px;" id="_pregnancyloss_add" class="btn fas fa-plus-square d-inline"></button>
+            }
+        }
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Lost Pregnancies:</strong></h5>
+    </div>
+
+    @{
+        if (Model.Pregnancies.Count > 0)
+        {
+
+            <div class="container">
+
+
+                <div class="row row_head">
+                    <div class="col" hidden>Id</div>
+                    <div class="col">Date</div>
+                    <div class="col">Type</div>
+                    <div class="col">Note</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+
+                    <div class="col">Actions</div>
+                </div>
+
+
+
+                @foreach (PregnanciesLossMR.Details x in Model.Pregnancies)
+                {
+
+                    <div class="row row_data">
+                        <div class="col" hidden>@x.Id</div>
+                        <div class="col">@x.PregnancyLossDate.ToShortDateString()</div>
+                        <div class="col">@x.Type</div>
+                        <div class="col">@x.Note</div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+
+                        <div class="col">
+                            @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+                                {
+                                    <i style="font-size:20px;" class="_pregnancyloss_edit fas fa-edit a_icon"></i>
+                                    <a style="font-size:20px;" class="_pregnancyloss_delete fas fa-trash-alt a_icon" href="/Records/PregnanciesLoss/Delete?Id=@x.Id"></a>
+                                }
+                                else
+                                {
+                                    <div>N/A</div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+
+
+                }
+
+            </div>
+
+        }
+
+    }
+    <div class="container" id="_pregnanciesloss_add"></div>
+    <div class="container" id="_pregnanciesloss_edit"></div>
+</div>
+
+
+<script>
+    $('._pregnancyloss_edit').click(function () {
+        if ($('#_pregnanciesloss_edit').html() == "") {
+            var i = $(this).parent().parent().children().html();
+            $.ajax({
+                url: "/Records/PregnanciesLoss/Edit?Id=" + i,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_pregnanciesloss_edit").html(data);
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+                }
+            });
+        } else {
+            $('#_pregnanciesloss_edit').empty();
+        }
+
+    });
+    $('#_pregnancyloss_add').click(function () {
+        if ($('#_pregnanciesloss_add').html() == "") {
+
+            $.ajax({
+                url: "/Records/PregnanciesLoss/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_pregnanciesloss_add").html(data);
+
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+
+                }
+            });
+        } else {
+            $('#_pregnanciesloss_add').empty();
+        }
+    });
+</script>

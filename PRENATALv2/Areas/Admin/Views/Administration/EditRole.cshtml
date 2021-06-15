@@ -1,0 +1,60 @@
+﻿@using PRENATALv2.Areas.Admin.Models
+@model EditRole
+@{
+    ViewData["Title"] = "EditRole";
+}
+@{
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        <a href="/Admin/Administration/EditUsersInRole?RoleId=@Model.Id" style="vertical-align:middle;" class="fas fa-user-edit a_icon d-inline"></a>
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Edit role:</strong></h5>
+    </div>
+
+    @using (Html.BeginForm("SaveExistingRole", "Administration", FormMethod.Post, new { @class = "form-group" }))
+    {
+        @Html.AntiForgeryToken();
+        <fieldset class="btn-group-vertical align-content-md-around">
+            @*@Html.LabelFor(Model => Model.Id)
+                @Html.DisplayFor(model => model.Id)<br />*@
+            @Html.HiddenFor(model => model.Id)
+
+            @Html.LabelFor(Model => Model.RoleName, new { @class = "col-sm-12" })
+            @Html.EditorFor(model => model.RoleName, "", new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.RoleName, "", new { @class = "text-danger" })
+            <br />
+
+            <input type="submit" class="btn btn-prenatal" value="Save" />
+
+            @Html.ActionLink("Cancel", "ShowRoles", "Administration", new { area = "Admin" }, new { @class = "btn btn-prenatal" })
+
+
+        </fieldset>
+    }
+    @if (Model.ListOfUsers != null)
+    {
+        <div class="row row_head">
+            <div class="col">User Id</div>
+            <div class="col">Username</div>
+            <div class="col">Name</div>
+            <div class="col">Surname</div>
+
+        </div>
+        foreach (var x in Model.ListOfUsers)
+        {
+
+            <div class="row row_data">
+                <div class="col">@x.Id</div>
+                <div class="col">@x.UserName</div>
+                <div class="col">@x.Name</div>
+                <div class="col">@x.Surname</div>
+
+            </div>
+        }
+
+    }
+
+</div>

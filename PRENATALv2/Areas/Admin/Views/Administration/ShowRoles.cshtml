@@ -1,0 +1,50 @@
+﻿@using PRENATALv2.Areas.Home.Models
+
+@Html.AntiForgeryToken()
+@model List<AppRole>
+@{
+    ViewData["Title"] = "ShowRoles";
+}
+@{
+    Layout = "_Layout";
+}
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        <a href="/Admin/Administration/CreateRole" style="vertical-align:middle; font-size:20px;" class="btn fas fa-plus-square d-inline a_icon"></a>
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">All Roles:</strong></h5>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>NumberOfUsers</th>
+                <th>Actions</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (AppRole x in Model)
+            {
+
+                <tr>
+                    <td>@x.Id</td>
+                    <td>@x.Name</td>
+                    <td>@x.NumberOfUsers</td>
+                    <td>
+
+                        <a href="/Admin/Administration/EditRole?RoleId=@x.Id" class="fas fa-edit a_icon"></a>
+                        <a href="/Admin/Administration/DeleteRole?RoleId=@x.Id" class="fas fa-trash-alt a_icon"></a>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+
+</div>

@@ -1,0 +1,104 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using PRENATALv2.Areas.Home.Models;
+
+@inject SignInManager<AppUser> SignInMgr;
+@inject UserManager<AppUser> UserMgr;
+@{ 
+    int CurrentId = UserMgr.FindByNameAsync(User.Identity.Name).Result.Id;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/site.css" type="text/css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+    <title>@ViewData["Title"] - PRENATAL</title>
+</head>
+@Html.AntiForgeryToken()
+<body>
+    <header class="main_header">
+
+        <a class="href_logo" href="/Home/Home/Index"><img class="img_logo" src="~/images/logo.png" /><label class="text_logo">PRENATAL</label></a>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="dropdown show mini_menu">
+                <a style="font-size:12px" class="btn btn-prenatal dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Welcome @User.Identity.Name!
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item a_mini" asp-area="Home" asp-controller="Profile" asp-action="ShowProfile" asp-route-Id="@CurrentId">Profile</a>
+                    <a class="dropdown-item a_mini" asp-area="Home" asp-controller="Account" asp-action="ChangePassword" asp-route-Id="@CurrentId">Change password</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item a_mini" asp-area="Home" asp-controller="Account" asp-action="Logout">Logout</a>
+                </div>
+            </div>
+
+
+
+        }
+
+
+    </header>
+    <hr id="hr1" />
+
+    <nav id="side_menu">
+        <ul>
+            <li class="menu_item">
+                <a class="menu_link" asp-area="Home" asp-controller="Home" asp-action="FrontPage">Home</a>
+            </li>
+
+            @if (SignInMgr.IsSignedIn(User) && User.IsInRole("Admin") || SignInMgr.IsSignedIn(User) && User.IsInRole("admin"))
+            {
+                <li class="admin_menu" onclick="sh_admin_menu()"><a class="menu_link">Security</a></li>
+                <li class="admin_menu_item"><a class="menu_link" asp-area="Admin" asp-controller="Administration" asp-action="ShowUsers">Users</a></li>
+                <li class="admin_menu_item"><a class="menu_link" asp-area="Admin" asp-controller="Administration" asp-action="ShowRoles">Roles</a></li>
+            }
+            @if (SignInMgr.IsSignedIn(User) && User.IsInRole("Nurse") || SignInMgr.IsSignedIn(User) && User.IsInRole("nurse")
+             || SignInMgr.IsSignedIn(User) && User.IsInRole("Doctor") || SignInMgr.IsSignedIn(User) && User.IsInRole("doctor"))
+            {
+                <li class="emp_menu" onclick="sh_emp_menu()"><a class="menu_link">User management</a></li>
+                <li class="emp_item"><a class="menu_link" asp-area="Employees" asp-controller="Doctors" asp-action="Show">Doctors</a></li>
+                <li class="emp_item"><a class="menu_link" asp-area="Employees" asp-controller="Nurses" asp-action="Show">Nurses</a></li>
+                <li class="emp_item"><a class="menu_link" asp-area="Employees" asp-controller="Patients" asp-action="Show">Patients</a></li>
+            }
+            @if (SignInMgr.IsSignedIn(User) && User.IsInRole("Nurse") || SignInMgr.IsSignedIn(User) && User.IsInRole("nurse")
+        || SignInMgr.IsSignedIn(User) && User.IsInRole("Doctor") || SignInMgr.IsSignedIn(User) && User.IsInRole("doctor"))
+            //|| SignInMgr.IsSignedIn(User) && User.IsInRole("Patient") || SignInMgr.IsSignedIn(User) && User.IsInRole("patient"))
+            {
+                <li class="menu_item"><a class="menu_link" href="/Records/MedicalRecords/ShowAll">Medical records</a></li>
+                @*<li class="menu_item"><a class="menu_link" asp-area="Admin" asp-controller="SMS" asp-action="Send">SMS Send</a></li>*@
+                <li class="menu_item"><a class="menu_link" href="/Home/Account/AccessDenied">Appointments</a></li>
+            }
+            @if (SignInMgr.IsSignedIn(User) && User.IsInRole("Patient") || SignInMgr.IsSignedIn(User) && User.IsInRole("patient"))
+
+            {
+                <li class="menu_item"><a class="menu_link" href="/Records/MedicalRecords/ShowOne?Id=@CurrentId">My MedicalRecords</a></li>
+                <li class="menu_item"><a class="menu_link" href="/Home/Charts/VitalSigns?Id=@CurrentId">My VitalSigns</a></li>
+                <li class="menu_item"><a class="menu_link" href="/Home/Account/AccessDenied">Appointments</a></li>
+            }
+        </ul>
+    </nav>
+    <div class="main_container">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="foot blockquote-footer">
+        &copy; 2020 - PRENATAL - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+    @*@RenderSection("Styles",required:true)*@
+</body>
+</html>

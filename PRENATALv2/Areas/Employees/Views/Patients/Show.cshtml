@@ -1,0 +1,53 @@
+﻿@using PRENATALv2.Areas.Employees.Models
+@model List<Patient>
+@{
+    Layout = "_Layout";
+}
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        <a href="/Employees/Patients/Add" style="vertical-align:middle; font-size:20px;" class="btn fas fa-plus-square d-inline a_icon"></a>
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">ALL PATIENTS:</strong></h5>
+    </div>
+
+    <table class="table">
+        <tr><th>Id</th><th>UserName</th><th>Name</th><th>Surname</th><th>PhoneNumber</th><th>E-mail</th><th>Gender</th><th>Assigned doctor</th><th>MRnumber</th><th>Actions</th></tr>
+        @foreach (Patient x in Model)
+        {
+            <tr>
+                <td>@x.Id</td>
+                <td>@x.UserName</td>
+                <td>@x.Name</td>
+                <td>@x.Surname</td>
+                <td>@x.PhoneNumber</td>
+                <td>@x.Email</td>
+                <td>@x.Gender</td>
+                @if (x.DoctorId == null)
+                {
+                    <td>N/A</td>
+                }
+                else
+                {
+                    <td>@x.Doctor</td>
+                }
+
+                @{ if (x.MedicalRecordNumber != null)
+                    {
+                        <td><a class="btn btn-small" href="/Records/MedicalRecords/ShowOne?Id=@x.Id">@x.MedicalRecordNumber.ToString()</a></td>
+                    }
+                    else
+                    {
+                        <td><a class="btn btn-small" href="/Records/MedicalRecords/AddOne?Id=@x.Id">Create MR</a></td>
+                    }
+                }
+                <td>
+                    <a class="fas fa-edit a_icon" href="/Employees/Patients/Edit?Id=@x.Id"></a>
+                    <a class="fas fa-trash-alt a_icon" href="/Employees/Patients/Delete?Id=@x.Id"></a>
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>

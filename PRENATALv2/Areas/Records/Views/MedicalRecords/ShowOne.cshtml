@@ -1,0 +1,334 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model MR
+@{
+    Layout = "_Layout";
+}
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<nav style="font-size:11px; text-align:center;">
+    <ul style="height:55px" class="nav justify-content-center navbar navbar-expand-lg navbar-dark bg-prenatal">
+        <li id="MedicalRecordId" class="navbar-brand" href="#"><button class="btn btn-prenatal"><strong>@Model.MedicalRecordNumber</strong></button></li>
+        <li id="_allergy_show" class="nav-item">
+            <button class="nav-link active btn btn-prenatal">Allergies</button>
+        </li>
+
+        <li id="_medicalhistory_show" class="nav-item">
+            <button class="nav-link active btn btn-prenatal">History</button>
+        </li>
+        <li id="_partner_show" class="nav-item">
+            <button class="nav-link active btn btn-prenatal">Partners</button>
+        </li>
+
+        <li id="_pregnancy_loss_show" class="nav-item">
+            <button class="nav-link active btn btn-prenatal">LostPreg.</button>
+        </li>
+        <li id="_previous_pregnancies_show" class="nav-item">
+            <button class="active nav-link btn btn-prenatal">Prev.Preg.</button>
+        </li>
+        <li id="_substance_show" class="nav-item">
+            <button class="btn btn-prenatal active nav-link">Substances</button>
+        </li>
+        <li id="_therapy_show" class="nav-item">
+            <button class="nav-link active btn btn-prenatal">Therapies</button>
+        </li>
+        <li id="_ultrasound_show" class="nav-item">
+            <button class="active nav-link btn btn-prenatal">Ultrasounds</button>
+        </li>
+        <li id="_vital_show" class="nav-item">
+            <button class="nav-link active btn btn-prenatal">VitalSigns</button>
+        </li>
+        <li id="_referral_show" class="nav-item">
+            <button class="nav-link active btn btn-prenatal">Referrals</button>
+        </li>
+        <li id="_photo_show" class="nav-item">
+            <button class="nav-link active btn btn-prenatal">Photos</button>
+        </li>
+        <li id="_file_show" class="nav-item">
+            <button class="nav-link active btn btn-prenatal">Files</button>
+        </li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="text-left" style="padding:5px 0 5px 0;">
+        <h5><strong class="text-uppercase">Personal informations:</strong></h5>
+    </div>
+
+    <div class="container">
+
+        <div class="row row_head">
+            <div class="col">Assig. Doctor</div>
+            <div class="col">Name</div>
+            <div class="col">Surname</div>
+            <div class="col">MaidenName</div>
+            <div class="col">PIN</div>
+            <div class="col">BirthDate</div>
+        </div>
+
+        <div class="row row_data">
+            <div class="col">@Model.Doctor</div>
+            <div class="col">@Model.Name</div>
+            <div class="col">@Model.Surname</div>
+            <div class="col">@Model.MaidenName</div>
+            <div class="col">@Model.PersonalIdentificationNumber</div>
+            <div class="col">@Model.BirthDate.ToShortDateString()</div>
+        </div>
+
+
+    </div>
+
+    <div class="container">
+
+        <div class="row row_head">
+
+            <div class="col">PhoneNumber</div>
+            <div class="col">E-mail</div>
+            <div class="col">MartialStatus</div>
+            <div class="col">BloodType</div>
+            <div class="col">RhFactor</div>
+            <div class="col">
+                @{
+
+                    @if (User.IsInRole("Patient") == true)
+                    {
+                        <div>EMERGENCY SMS</div>
+                    }
+            }
+        </div>
+    </div>
+
+    <div class="row row_data">
+
+        <div class="col">@Model.PhoneNumber</div>
+        <div class="col">@Model.Email</div>
+        <tdiv class="col" d>@Model.MartialStatus</tdiv>
+        <div class="col">@Model.BloodType</div>
+        <tdiv class="col" d>@Model.RhFactor</tdiv>
+        <div class="col">
+            @{
+                @if (User.IsInRole("Patient") == true)
+                {
+                    <i class="fas fa-sms a_icon" id="send_sms" @*href="/Admin/SMS/Send?to={@Model.DoctorObj.PhoneNumber}&text={@Model.Name+' '+@Model.Surname}+'EMERGENCY::CALL!!!'"*@></i>
+
+                }
+            }
+        </div>
+    </div>
+
+
+</div>
+
+</div>
+<div id="_allergies_show"></div>
+<div id="_medicalhistories_show"></div>
+<div id="_partners_show"></div>
+<div id="_pregnancies_loss_show"></div>
+<div id="_pregnancies_previous_show"></div>
+<div id="_substances_show"></div>
+<div id="_therapies_show"></div>
+<div id="_ultrasounds_show"></div>
+<div id="_vitals_show"></div>
+<div id="_referrals_show"></div>
+<div id="_photos_show"></div>
+<div id="_files_show"></div>
+<script>
+    //send sms
+        $('#send_sms').click(function () {
+            var to = @Html.Raw(Model.DoctorObj.PhoneNumber.ToString());
+            var text = '@Html.Raw(Model.Name.ToString()+" "+Model.Surname.ToString())';
+            var msg = " EMERGENCY:: Please call me!!!";
+            $.ajax({
+                url: "/Admin/SMS/Send",
+                data:"to="+to+"&text="+text+" "+msg,
+                type: "POST",
+                dataType: "JSON",
+                success: function () {
+                    alert("SENT--> To: "+to);
+                }
+            });
+
+    });
+
+    //functions one by one
+    $('#_file_show').click(function () {
+        if ($('#_files_show').html()=="") {
+            $.ajax({
+                url: "/Records/Files/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_files_show").html(data);
+                }
+            });
+        } else {
+            $('#_files_show').empty();
+        }
+    });
+
+    $('#_photo_show').click(function () {
+        if ($('#_photos_show').html()=="") {
+            $.ajax({
+                url: "/Records/Photos/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_photos_show").html(data);
+                }
+            });
+        } else {
+            $('#_photos_show').empty();
+        }
+    });
+
+    $('#_vital_show').click(function () {
+        if ($('#_vitals_show').html()=="") {
+            $.ajax({
+                url: "/Records/VitalSigns/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_vitals_show").html(data);
+                }
+            });
+        } else {
+            $('#_vitals_show').empty();
+        }
+    });
+
+    $('#_ultrasound_show').click(function () {
+        if ($('#_ultrasounds_show').html()=="") {
+            $.ajax({
+                url: "/Records/Ultrasounds/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_ultrasounds_show").html(data);
+                }
+            });
+        } else {
+            $('#_ultrasounds_show').empty();
+        }
+    });
+
+    $('#_therapy_show').click(function () {
+        if ($('#_therapies_show').html()=="") {
+            $.ajax({
+                url: "/Records/Therapies/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_therapies_show").html(data);
+                }
+            });
+        } else {
+            $('#_therapies_show').empty();
+        }
+    });
+
+
+    $('#_previous_pregnancies_show').click(function () {
+        if ($('#_pregnancies_previous_show').html()=="") {
+            $.ajax({
+                url: "/Records/PregnanciesPrevious/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_pregnancies_previous_show").html(data);
+                }
+            });
+        } else {
+            $('#_pregnancies_previous_show').empty();
+        }
+    });
+    $('#_pregnancy_loss_show').click(function () {
+        if ($('#_pregnancies_loss_show').html()=="") {
+            $.ajax({
+                url: "/Records/PregnanciesLoss/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_pregnancies_loss_show").html(data);
+                }
+            });
+        } else {
+            $('#_pregnancies_loss_show').empty();
+        }
+    });
+
+
+        $('#_allergy_show').click(function () {
+        if ($('#_allergies_show').html()=="") {
+            $.ajax({
+                url: "/Records/Allergies/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_allergies_show").html(data);
+                }
+            });
+        } else {
+            $('#_allergies_show').empty();
+        }
+    });
+
+    $('#_partner_show').click(function () {
+        if ($('#_partners_show').html()=="") {
+            $.ajax({
+                url: "/Records/Partners/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_partners_show").html(data);
+                }
+            });
+        } else {
+            $('#_partners_show').empty();
+        }
+    });
+
+    $('#_medicalhistory_show').click(function () {
+            if ($('#_medicalhistories_show').html()=="") {
+            $.ajax({
+                url: "/Records/MedicalHistories/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_medicalhistories_show").html(data);
+                }
+            });
+        } else {
+                $('#_medicalhistories_show').empty();
+        }
+    });
+
+    $('#_substance_show').click(function () {
+        if ($('#_substances_show').html()=="") {
+            $.ajax({
+                url: "/Records/SubstancesUse/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_substances_show").html(data);
+                }
+            });
+        } else {
+            $('#_substances_show').empty();
+        }
+    });
+
+        $('#_referral_show').click(function () {
+        if ($('#_referrals_show').html()=="") {
+            $.ajax({
+                url: "/Records/Referrals/Show?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_referrals_show").html(data);
+                }
+            });
+        } else {
+            $('#_referrals_show').empty();
+        }
+    });
+</script>
+

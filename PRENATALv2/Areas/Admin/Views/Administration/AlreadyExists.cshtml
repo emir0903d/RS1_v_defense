@@ -1,0 +1,11 @@
+﻿@{
+    Layout = "_Anonymous";
+}
+@{
+    ViewData["Title"] = "ErrorMsg";
+}
+@Html.AntiForgeryToken()
+<div class="container">
+    <h1>ErrorMsg</h1>
+    <h6 class="bg-danger">User account already exists in the database!</h6>
+</div>

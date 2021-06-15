@@ -1,0 +1,61 @@
+﻿@using PRENATALv2.Areas.Home.Models
+@model _2FAenable
+
+
+    <div class="container">
+        <hr />
+        <p>To use an authenticator app go through the following steps:</p>
+                <p>
+                    First: Download a two-factor authenticator app like Microsoft Authenticator or Google Authenticator!
+                </p>
+            
+                <p>Second: Scan the QR Code or enter this key <kbd>@Model.SharedKey</kbd> into your two factor authenticator app.</p>
+                <div class="container text-center">
+                    <div style="display:inline-block !important" id="qrCode"></div>
+                    <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+                </div>       
+        
+            
+                <p>
+                    Third: Once you have scanned the QR code or input the key above, your two factor authentication app will provide you
+                    with a unique code. Enter the code in the confirmation box below.
+                </p>
+           
+    </div>
+
+    <div class="container">
+        <hr />
+        @using (Html.BeginForm("AttemptEnableAuthenticator", "TwoFactorAuth", FormMethod.Post, new { @class = "form-group d-inline-block" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="btn-group-vertical">
+                <div class="d-inline-block">
+                    @Html.HiddenFor(Model => Model.SharedKey)
+                    @Html.HiddenFor(Model => Model.AuthenticatorUri)
+                    @Html.TextBoxFor(Model => Model.Code, "", new { @style = "width:200px;", @class = "form-control d-inline" })
+                    @Html.ValidationMessageFor(Model => Model.Code, "", new { @class = "text-danger" })
+                    <button type="submit" class="far fa-check-circle d-inline a_icon" />
+                </div>
+            </fieldset>
+        }
+    </div>
+
+
+ 
+
+    <script src="~/lib/qrcodejs/qrcode.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            new QRCode(document.getElementById("qrCode"),
+        {
+            text: "@Html.Raw(Model.AuthenticatorUri)",
+            width: 150,
+            height: 150
+        });
+
+        });
+
+
+    </script>
+

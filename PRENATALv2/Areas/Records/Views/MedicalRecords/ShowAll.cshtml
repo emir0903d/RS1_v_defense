@@ -1,0 +1,99 @@
+﻿@{
+    Layout = "_Layout";
+}
+@Html.AntiForgeryToken()
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" type="text/css" rel="stylesheet" />
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="application/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $.fn.dataTable.moment("YYYY/DD/MM HH:mm");
+
+        $("#mrn").DataTable({
+
+            "ajax": {
+                "url": "/Records/MedicalRecords/JsonShowAll",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                //{ "data": "id" },
+                { "data": "medicalRecordNumber" },
+                { "data": "personalIdentificationNumber" },
+                {
+                    "data": null, render: function (data) {
+                        // Combine the first and last names into a single table field
+                        return data.name + ' ' + data.surname;
+                    }
+                },
+                //{ "data": "name" },
+                //{ "data": "surname" },
+                { "data": "bloodType", "width": "15px", },
+                { "data": "rhFactor", "width": "15px", },
+                {
+                    "data": "birthDate", "type": "datetime", "render": function (data, type, row) {
+                        data = moment(data).format('YYYY MM DD');
+                        return data;
+                    }
+                },
+                { "data": "phoneNumber" },
+                { "data": "email" },
+                //{
+                //    "orderable": false,
+                //    "data": "id", "width": "30px", "render": function (data) {
+                //        return '<a class="btn btn-small" href="/Records/MedicalRecords/ShowOne?Id=' + data + '">Details</a>';
+
+                //    }
+                //},
+                {
+                    "orderable": false,
+                    "data": "id", "width": "200px", "render": function (data) {
+                        // Combine the first and last names into a single table field
+                        return '<a style="font-size:20px;" class="fas fa-info-circle a_icon" href="/Records/MedicalRecords/ShowOne?Id=' + data + '"></a>'
+                            + ' ' + '<a style="font-size:20px;" class="fas fa-edit a_icon" href="/Records/MedicalRecords/Edit?Id=' + data + '"></a>'
+                            + ' ' + '<a style="font-size:20px;" class="fas fa-trash-alt a_icon" href="/Records/MedicalRecords/Delete?Id=' + data + '"></a>';
+
+                    }
+                },
+            ]
+        });
+
+    });
+
+</script>
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        <a style="vertical-align:middle; font-size:20px;" href="/Records/MedicalRecords/Add" class="btn fas fa-plus-square d-inline a_icon"></a>
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Medical records:</strong></h5>
+    </div>
+    <hr />
+
+    <table id="mrn" class="table" style="font-size:12px;">
+        <thead class="thead-light">
+            <tr>
+                @*<th>Id</th>*@
+                <th>MRN</th>
+                <th>PIN</th>
+                <th>Name & Surname</th>
+                @*<th>Name</th>
+                    <th>Surname</th>*@
+                <th>BloodType</th>
+                <th>RhFactor</th>
+                <th>BirthDate</th>
+                <th>PhoneNumber</th>
+                <th>E-mail</th>
+                <th>Actions</th>
+                @*<th>Actions</th>*@
+
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+

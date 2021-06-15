@@ -1,0 +1,79 @@
+﻿@using PRENATALv2.Areas.Home.Models
+
+@model Register
+@{
+    Layout = "_Anonymous";
+}
+
+<div class="container">
+    <h3><strong class="text-uppercase">Register</strong></h3>
+
+
+    @using (Html.BeginForm("RegisterAttempt", "Account", FormMethod.Post, new { @class = "form-group" }))
+    {
+        @Html.AntiForgeryToken();
+        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+        <fieldset class="align-content-md-around">
+            <div class="d-inline-block">
+                <label>Name: </label>             
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })<br />
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="d-inline-block">
+                <label>Surname: </label>
+                @Html.TextBoxFor(model => model.Surname, new { @class = "form-control" })<br />
+                @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="d-inline-block">
+                <label>Gender:</label>
+                @Html.DropDownListFor(model => model.Gender, new SelectList(Model.Gender_List, "Value", "Text"), "Choose gender...", new { @class = "form-control", style = "width:200px;" })<br />
+                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            <div class="d-inline-block">
+                @Html.LabelFor(Model => Model.Email)
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })<br />
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="d-inline-block">
+                <label>PhoneNumber: </label>
+                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control" })<br />
+                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="d-inline-block">
+                <label>Account type:</label>
+                @Html.DropDownListFor(model => model.Type, new SelectList(Model.Type_List, "Value", "Text"), "Choose:",
+               new { @Id = "Type", @onchange = "IsPatient();", @class = "form-control", style = "width:200px;" })<br />
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="d-inline-block">
+                <div id="hidden_options" hidden name="hidden_options">
+                    <label>Doctor:</label>
+                    @Html.DropDownListFor(model => model.DoctorId, new SelectList(Model.Doctors, "Value", "Text"), "Choose:",
+                    new { @class = "form-control", style = "width:200px;" })<br />
+                    @Html.ValidationMessageFor(model => model.DoctorId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="d-inline-block">
+                <input type="submit" class="btn btn-dark" value="Register" />
+            </div>
+        </fieldset>
+    }
+</div>
+
+<script>
+    function IsPatient() {
+        if ($('#Type').val() == "3") {
+            $('#hidden_options').removeAttr('hidden');
+        }
+        else {
+            $('#hidden_options').attr("hidden", true);
+
+        }
+    }
+</script>

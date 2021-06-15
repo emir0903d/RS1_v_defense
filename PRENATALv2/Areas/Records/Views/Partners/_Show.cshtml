@@ -1,0 +1,127 @@
+﻿@using PRENATALv2.Areas.Records.Models;
+@model Partners
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+        {
+            <button style="vertical-align:middle; font-size:20px;" id="_partner_add" class="btn fas fa-plus-square d-inline"></button>
+        }
+
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Partners:</strong></h5>
+    </div>
+
+    @{
+        if (Model.ListPartners.Count > 0)
+        {
+
+            <div class="container">
+
+
+                <div class="row row_head">
+                    <div class="col" hidden>Id</div>
+                    <div class="col">Name</div>
+                    <div class="col">Surname</div>
+                    <div class="col">BloodType</div>
+                    <div class="col">RhFactor</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+
+                    <div class="col">Actions</div>
+                </div>
+
+
+
+                @foreach (Partners.Details x in Model.ListPartners)
+                {
+
+                    <div class="row row_data">
+                        <div class="col" hidden>@x.PartnerId</div>
+                        <div class="col">@x.Name</div>
+                        <div class="col">@x.Surname</div>
+                        <div class="col">@x.BloodType</div>
+                        <div class="col">@x.RHFactor</div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+
+                        <div class="col">
+                            @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                            {
+                                <i style="font-size:20px;" class="_partner_edit fas fa-edit a_icon"></i>
+                                <a style="font-size:20px;" class="_partner_delete fas fa-trash-alt a_icon" href="/Records/Partners/Delete?Id=@x.PartnerId"></a>
+                            }
+                            else
+                            {
+                                <div>N/A</div>
+                            }
+
+                        </div>
+                    </div>
+
+
+                }
+
+            </div>
+
+        }
+
+    }
+    <div class="container" id="_partners_add"></div>
+    <div class="container" id="_partners_edit"></div>
+</div>
+
+
+<script>
+    $('._partner_edit').click(function () {
+        if ($('#_partners_edit').html() == "") {
+            var i = $(this).parent().parent().children().html();
+            $.ajax({
+                url: "/Records/Partners/Edit?Id=" + i,
+                type: "POST",
+                dataType: "html",
+                success: function (data) {
+                    $("#_partners_edit").html(data);
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+                }
+            });
+        } else {
+            $('#_partners_edit').empty();
+        }
+
+    });
+    $('#_partner_add').click(function () {
+        if ($('#_partners_add').html() == "") {
+
+            $.ajax({
+                url: "/Records/Partners/Add?Id="+@Model.MedicalRecordId,
+                type: "POST",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_partners_add").html(data);
+
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+
+                }
+            });
+        } else {
+            $('#_partners_add').empty();
+        }
+    });
+</script>

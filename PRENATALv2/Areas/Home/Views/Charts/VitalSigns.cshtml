@@ -1,0 +1,124 @@
+﻿@model int
+@{
+    Layout = "_Layout";
+}
+@Html.AntiForgeryToken()
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+          var jsonData = $.ajax({
+                url: "/Home/Charts/GetVitalSigns?Id=@Model",
+                dataType: "json",
+                async: false
+          }).responseJSON;
+
+          var data = new google.visualization.DataTable();
+          var data_01 = new google.visualization.DataTable();
+          var data_02 = new google.visualization.DataTable();
+
+          data.addColumn('date', 'Date',);
+          data.addColumn('number', 'Temperature', 'interval');
+          data.addColumn('number', 'SystolicPressure', 'interval');
+          data.addColumn('number', 'DiastolicPressure', 'interval');
+          data.addColumn('number', 'HeartBeats', 'interval');
+          data.addColumn('number', 'RespiratoryRate', 'interval');
+          data.addColumn('number', 'Weight', 'interval');
+
+          for (var i = 0; i < jsonData.length; i++) {
+              var dateStr = jsonData[i].date.substr(0, 10);
+              data.addRow([new Date(dateStr), parseFloat(jsonData[i].temperature),
+                  parseInt(jsonData[i].systolicPressure), parseInt(jsonData[i].diastolicPressure),
+                  parseInt(jsonData[i].heartBeats), parseInt(jsonData[i].respiratoryRate),
+                  parseFloat(jsonData[i].weight)]);
+
+          }
+
+          data_01.addColumn('date', 'Date');
+          data_01.addColumn('number', 'SystolicPressure', 'interval');
+          data_01.addColumn('number', 'DiastolicPressure', 'interval');
+          data_01.addColumn('number', 'HeartBeats', 'interval');
+          for (var i = 0; i < jsonData.length; i++) {
+              var dateStr = jsonData[i].date.substr(0, 10);
+              data_01.addRow([new Date(dateStr),parseInt(jsonData[i].systolicPressure), parseInt(jsonData[i].diastolicPressure),
+              parseInt(jsonData[i].heartBeats)]);
+
+          }
+
+          data_02.addColumn('date', 'Date');
+          data_02.addColumn('number', 'Temperature', 'interval');
+          data_02.addColumn('number', 'RespiratoryRate', 'interval');
+          data_02.addColumn('number', 'Weight', 'interval');
+          for (var i = 0; i < jsonData.length; i++) {
+              var dateStr = jsonData[i].date.substr(0, 10);
+                  data_02.addRow([new Date(dateStr), parseFloat(jsonData[i].temperature), parseInt(jsonData[i].respiratoryRate),
+                  parseFloat(jsonData[i].weight)]);
+
+          }
+
+          var options_lines = {
+              title: 'All VitalSign intervals',
+              curveType: 'function',
+              lineWidth: 4,
+              legend: { position: 'top', maxLines: 7 },
+              hAxis: {
+                  format: 'MMM, y',
+                  viewWindowMode:'explicit'
+              }
+
+          };
+          var options_lines_01 = {
+              title: 'Pressure&HeartBeats Intervals',
+              curveType: 'function',
+              lineWidth: 4,
+              legend: { position: 'top', maxLines: 4 },
+              hAxis: {
+                  format: 'MMM, y',
+                  viewWindowMode: 'explicit'
+              }
+
+          };
+          var options_lines_02 = {
+              title: 'Temperature/Respiratory/Weight Intervals',
+              curveType: 'function',
+              lineWidth: 4,
+              legend: { position: 'top', maxLines: 4 },
+              hAxis: {
+                  format: 'MMM, y',
+                  viewWindowMode: 'explicit'
+              }
+
+          };
+          var options_combo = {
+              title: 'All VitalSigns',
+              seriesType: 'bars',
+              series: { 6: { type: 'line' } },
+              legend: { position: 'top', maxLines: 6 },
+              hAxis: {
+                  format: 'MMM, y',
+                  viewWindowMode: 'explicit'
+              }
+
+          };
+
+          var chart_lines = new google.visualization.LineChart(document.getElementById('chart_lines'));
+          chart_lines.draw(data, options_lines);
+          var chart_lines = new google.visualization.LineChart(document.getElementById('chart_lines_01'));
+          chart_lines.draw(data_01, options_lines_01);
+          var chart_lines = new google.visualization.LineChart(document.getElementById('chart_lines_02'));
+          chart_lines.draw(data_02, options_lines_02);
+          var chart_lines = new google.visualization.ComboChart(document.getElementById('chart_histogram'));
+          chart_lines.draw(data, options_combo);
+      }
+</script>
+
+<div class="container">
+    <div id="chart_lines" style="width: 1100px; height: 600px;"></div>
+    <div id="chart_lines_01" style="width: 1100px; height: 600px;"></div>
+    <div id="chart_lines_02" style="width: 1100px; height: 600px;"></div>
+    <div id="chart_histogram" style="width: 1100px; height: 600px;"></div>
+</div>
+

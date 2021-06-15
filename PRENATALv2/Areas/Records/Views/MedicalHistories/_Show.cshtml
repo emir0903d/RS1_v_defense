@@ -1,0 +1,129 @@
+﻿@using PRENATALv2.Areas.Records.Models;
+@model MedicalHistoriesMR
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+        {
+            <button style="vertical-align:middle; font-size:20px;" id="_medicalhistory_add" class="btn fas fa-plus-square d-inline"></button>
+        }
+
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Medical Histories:</strong></h5>
+    </div>
+
+    @{
+        if (Model.MedicalHistories.Count > 0)
+        {
+
+            <div class="container">
+
+
+                <div class="row row_head">
+                    <div class="col" hidden>Id</div>
+                    <div class="col">Date</div>
+                    <div class="col">Diagnosis</div>
+                    <div class="col">Note</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+
+                    <div class="col">Actions</div>
+                </div>
+
+
+                @foreach (MedicalHistoriesMR.Details x in Model.MedicalHistories)
+                {
+
+                    <div class="row row_data">
+                        <div class="col" hidden>@x.Id</div>
+                        <div class="col">@x.Date.ToShortDateString()</div>
+                        <div class="col">@x.Diagnosis</div>
+                        <div class="col">@x.Note</div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+
+                        <div class="col">
+                            @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                            {
+                                <i style="font-size:20px;" class="_medicalhistory_edit fas fa-edit a_icon"></i>
+                                <a style="font-size:20px;" class="_medicalhistory_delete fas fa-trash-alt a_icon" href="/Records/MedicalHistories/Delete?Id=@x.Id"></a>
+                            }
+                            else
+                            {
+                                <div>N/A</div>
+                            }
+
+                        </div>
+                    </div>
+
+
+                }
+
+            </div>
+
+        }
+
+    }
+    <div class="container" id="_medicalhistories_add"></div>
+    <div class="container" id="_medicalhistories_edit"></div>
+</div>
+
+
+<script>
+        $('._medicalhistory_edit').click(function () {
+            if ($('#_medicalhistories_edit').html() == "") {
+            var i = $(this).parent().parent().children().html();
+            $.ajax({
+                url: "/Records/MedicalHistories/Edit?Id=" + i,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_medicalhistories_edit").html(data);
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+                }
+            });
+        } else {
+            $('#_medicalhistories_edit').empty();
+        }
+
+    });
+    $('#_medicalhistory_add').click(function () {
+        if ($('#_medicalhistories_add').html() == "")
+        {
+
+            $.ajax({
+                url: "/Records/MedicalHistories/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_medicalhistories_add").html(data);
+
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+
+                }
+            });
+        }
+        else
+        {
+            $('#_medicalhistories_add').empty();
+        }
+    });
+</script>

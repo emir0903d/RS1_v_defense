@@ -1,0 +1,24 @@
+﻿@using PRENATALv2.Areas.Admin.Models
+@model CreateRole
+@{
+    ViewData["Title"] = "CreateRole";
+}
+@{
+    Layout = "_Layout";
+}
+
+<h1>Create a new role:</h1>
+
+<div class="container">
+    @using (Html.BeginForm("AttemptCreateRole", "Administration", FormMethod.Post, new { @class = "form-group" }))
+    {
+        @Html.AntiForgeryToken();
+        <fieldset class="btn-group-vertical align-content-md-around">
+            <label>Role name:</label>
+            @Html.TextBoxFor(model => model.RoleName, "", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.RoleName, "", new { @class = "text-danger" })<br />
+            <button type="submit" class="btn btn-prenatal">Create</button>
+        </fieldset>
+    }
+
+</div>

@@ -1,0 +1,15 @@
+﻿@using PRENATALv2.Areas.Home.Models
+@model _2FAdetails
+@Html.AntiForgeryToken();
+
+<div class="container">
+    <div class="alert alert-danger">
+        <strong># of Recovery codes left:</strong>@Model.RecoveryCodesLeft
+
+    </div>
+    <hr />
+    <a href="/Home/TwoFactorAuth/Disable2FA" class="btn btn-small">Disable 2FA</a>
+    <a href="/Home/TwoFactorAuth/GenerateRecoveryCodes" class="btn btn-small">Reset recovery codes</a>
+    <hr />
+</div>
+

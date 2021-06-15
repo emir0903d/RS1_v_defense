@@ -1,0 +1,51 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model PregnanciesPreviousMR.Details
+
+    <div class="container border-bottom">
+
+        <h3><strong class="text-uppercase">Add previous pregnancy:</strong></h3>
+        @using (Html.BeginForm("Save", "PregnanciesPrevious", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="align-content-lg-around">
+                @Html.HiddenFor(Model => Model.MedicalRecordId, new { @class = "d-none" })
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.PregnancyDate, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.PregnancyDate, new { @type = "date", @class = "datepicker form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.PregnancyDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.GestationWeeks, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.GestationWeeks, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.GestationWeeks, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.DeliveryType, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.DeliveryType, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.DeliveryType, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Complications, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.Complications, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Complications, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Outcome, new { @class = "col-sm-12" })<br />
+                    @Html.DropDownListFor(Model => Model.Outcome, new SelectList(Model.Outcomes, "Value", "Text"), "Select:", new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Outcome, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline">
+                    <button id="add_cancel" class="btn btn-small form-control">Cancel</button>
+                    <input type="submit" class="btn btn-small form-control" value="Save" />
+                </div>
+
+            </fieldset>
+        }
+
+    </div>
+<script>
+    $('#add_cancel').click(function () {
+
+        $(this).parent().parent().parent().parent().parent().empty();
+    });
+</script>

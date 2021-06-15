@@ -1,0 +1,72 @@
+﻿@using PRENATALv2.Areas.Admin.Models
+@model List<UserRole>
+@{
+    ViewData["Title"] = "EditUsersInRole";
+}
+@{
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="container">
+        <div class="text-left" style="vertical-align:middle;">
+            <a href="/Admin/Administration/CreateRole" style="vertical-align:middle; font-size:20px;" class="btn fas fa-plus-square d-inline a_icon"></a>
+
+            <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">add/remove users from role:</strong></h5>
+        </div>
+
+
+
+
+        @using (Html.BeginForm("AttemptEditUsersInRole", "Administration", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>RoleId</th>
+                            <th>UserId</th>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>UserName</th>
+                            <th>Is Selected?</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            for (int i = 0; i < Model.Count(); i++)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(Model => Model[i].RoleId, new { @class = "col-sm-12" })</td>
+                                    @Html.HiddenFor(Model => Model[i].RoleId)
+
+                                    <td>@Html.DisplayFor(Model => Model[i].UserId, new { @class = "col-sm-12" })</td>
+                                    @Html.HiddenFor(Model => Model[i].UserId)
+
+                                    <td>@Html.DisplayFor(model => Model[i].FirstName, new { @class = "col-sm-12" })</td>
+                                    @Html.HiddenFor(model => Model[i].FirstName)
+
+                                    <td>@Html.DisplayFor(model => Model[i].LastName, new { @class = "col-sm-12" })</td>
+                                    @Html.HiddenFor(model => Model[i].LastName)
+
+                                    <td>@Html.DisplayFor(model => Model[i].UserName, new { @class = "col-sm-12" })</td>
+                                    @Html.HiddenFor(model => Model[i].UserName)
+
+                                    <td>@Html.CheckBoxFor(model => Model[i].IsSelected, new { @class = "form-control" })</td>
+                                </tr>
+                            }
+
+                        }
+
+                    </tbody>
+                </table>
+
+                <input type="submit" class="btn btn-prenatal" value="Save" />
+            </fieldset>
+        }
+    </div>
+</div>

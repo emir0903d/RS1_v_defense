@@ -1,0 +1,41 @@
+﻿@using PRENATALv2.Areas.Employees.Models
+@model Patient
+@{
+    Layout = "_Layout";
+}
+
+    <div class="container">
+        <h3><strong class="text-uppercase">Add a new patient:</strong></h3>
+
+        @using (Html.BeginForm("SaveNew", "Patients", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="btn-group-vertical align-content-md-around">
+                @Html.LabelFor(Model => Model.Name, new { @class = "col-sm-12" })
+                @Html.TextBoxFor(Model => Model.Name, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model.Name, "", new { @class = "text-danger" })<br />
+
+                @Html.LabelFor(Model => Model.Surname, new { @class = "col-sm-12" })
+                @Html.TextBoxFor(Model => Model.Surname, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model.Surname, "", new { @class = "text-danger" })<br />
+
+                @Html.LabelFor(Model => Model.PhoneNumber, new { @class = "col-sm-12" })
+                @Html.TextBoxFor(Model => Model.PhoneNumber, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model.PhoneNumber, "", new { @class = "text-danger" })<br />
+
+                @Html.LabelFor(Model => Model.Email, new { @class = "col-sm-12" })
+                @Html.TextBoxFor(Model => Model.Email, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model.Email, "", new { @class = "text-danger" })<br />
+
+                @Html.LabelFor(Model => Model.Gender, new { @class = "col-sm-12" })
+                @Html.DropDownListFor(Model => Model.Gender, new SelectList(Model.Gender_List, "Value", "Text"), "Select:", new { @class = "form-control", style = "width:200px;" })
+                @Html.ValidationMessageFor(Model => Model.PhoneNumber, "", new { @class = "text-danger" })<br />
+
+                @Html.LabelFor(Model => Model.DoctorId, new { @class = "col-sm-12" })
+                @Html.DropDownListFor(Model => Model.DoctorId, new SelectList(Model.Doctors, "Value", "Text"), "Select:", new { @class = "form-control", style = "width:200px;" })
+                @Html.ValidationMessageFor(Model => Model.DoctorId, "", new { @class = "text-danger" })<br />
+                <input type="submit" class="btn btn-info" value="Create" />
+            </fieldset>
+        }
+
+    </div>

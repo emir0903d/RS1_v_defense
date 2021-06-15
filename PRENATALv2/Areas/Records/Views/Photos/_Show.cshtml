@@ -1,0 +1,54 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model PhotosMR
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+@Html.AntiForgeryToken();
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+        {
+            <button style="vertical-align:middle; font-size:20px;" id="_add" class="btn fas fa-plus-square d-inline"></button>
+        }
+
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Photos:</strong></h5>
+    </div>
+    @if (Model.Photos.Count() > 0)
+    {
+
+        @foreach (PhotosMR.Details x in Model.Photos)
+        {
+            <div class="d-inline-block text-center" style="border:solid 1px; border-radius:20px; margin:15px; padding:5px;">
+
+                <img class="photos d-block" src="@x.DataURL" />
+                <h6 class="d-inline">@x.Title</h6>
+                <h6 class="d-inline">@x.Date.ToShortDateString()</h6>
+                <div class="d-inline"><a style="font-size:20px;" class="_delete fas fa-trash-alt a_icon" href="/Records/Photos/Delete?Id=@x.Id"></a></div>
+            </div>
+
+        }
+    }
+
+</div>
+<div class="container" id="_adds"></div>
+@*<div class="container" id="_edits"></div>*@
+<script>
+
+    $('#_add').click(function () {
+        if ($('#_adds').html() == "") {
+
+            $.ajax({
+                url: "/Records/Photos/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_adds").html(data);
+
+                }
+
+            });
+        } else {
+            $('#_adds').empty();
+        }
+    });
+</script>

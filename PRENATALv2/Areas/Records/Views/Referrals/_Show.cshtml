@@ -1,0 +1,213 @@
+﻿@using PRENATALv2.Areas.Records.Models;
+@model ReferralsMR
+@Html.AntiForgeryToken()
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+        {
+            <button style="vertical-align:middle; font-size:20px;" id="_add" class="btn fas fa-plus-square d-inline"></button>
+        }
+
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Referrals:</strong></h5>
+    </div>
+
+    @{
+        if (Model.Referrals.Count > 0)
+        {
+
+        <div class="container">
+
+
+            <div class="row row_head">
+                <div class="col" hidden>Id</div>
+                <div class="col">Date</div>
+                <div class="col">Note</div>
+                <div class="col">Actions</div>
+            </div>
+
+
+            @foreach (ReferralsMR.Details x in Model.Referrals)
+            {
+
+                <div class="row row_data">
+                    <div class="col" hidden>@x.Id</div>
+                    <div class="col" d>@x.Date.ToShortDateString()</div>
+                    <div class="col">@x.Note</div>
+
+                    <div class="col">
+                        <i style="font-size:20px;" class="fas fa-eye a_icon _detail"></i>
+                        @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                        {
+                            <i style="font-size:20px;" class="_edit fas fa-edit a_icon"></i>
+                            <a style="font-size:20px;" class="_delete fas fa-trash-alt a_icon" href="/Records/Referrals/Delete?Id=@x.Id"></a>
+                        }
+                    </div>
+                </div>
+                <br />
+                <div hidden class="container" id="@x.Id">
+                    @if (x.BloodExams.Count() > 0)
+                    {
+
+                        <div class="container">
+                   
+                            <div class="row row_head">
+                                <div hidden class="col">Id</div>
+                                <div class="col">Blood Test</div>
+                                <div class="col">Units</div>
+                                <div class="col">Low</div>
+                                <div class="col">High</div>
+                                <div class="col">Date</div>
+                                <div class="col">Result</div>
+
+
+                            </div>
+
+                            @foreach (BloodExamsRef b in x.BloodExams)
+                            {
+                                <div class="row row_data">
+                                    <div hidden class="col">@b.Id</div>
+                                    <div class="col">@b.BloodTest</div>
+                                    <div class="col">@b.Unit</div>
+                                    <div class="col">@b.Low</div>
+                                    <div class="col">@b.High</div>
+                                    <div class="col">
+                                        @if (b.Results != null)
+                                        {
+                                            @b.Date.ToShortDateString()
+                                        }
+                                    </div>
+                                    <div class="col">
+                                        @if (b.Results != null)
+                                        {
+                                            @b.Results
+                                        }
+                                    </div>
+
+                                </div>
+                            }
+               
+                        </div>
+
+                    }
+                    @if (x.UrineExams.Count() > 0)
+                    {
+
+                        <div class="container">
+                 
+                            <div class="row row_head">
+                                <div hidden class="col">Id</div>
+                                <div class="col">Urine Test</div>
+                                <div class="col">Units</div>
+                                <div class="col">Interval</div>
+                                <div class="col"></div>
+                                <div class="col">Date</div>
+                                <div class="col">Result</div>
+
+
+                            </div>
+                            @foreach (UrineExamsRef u in x.UrineExams)
+                            {
+                                <div class="row row_data">
+                                    <div hidden class="col">@u.Id</div>
+                                    <div class="col">@u.UrineTest</div>
+                                    <div class="col">@u.Unit</div>
+                                    <div class="col">@u.ReferenceInterval</div>
+                                    <div class="col"></div>
+                                    <div class="col">
+                                        @if (u.Results != null)
+                                        {
+                                            @u.Date.ToShortDateString()
+                                        }
+                                    </div>
+                                    <div class="col">
+                                        @if (u.Results != null)
+                                        {
+                                            @u.Results
+                                        }
+                                    </div>
+
+                                </div>
+                            }
+         
+                        </div>
+
+                    }
+                </div>
+               
+
+
+                
+
+
+            }
+
+        </div>
+
+        }
+
+    }
+    <div class="container" id="_adds"></div>
+    <div class="container" id="_edits"></div>
+
+</div>
+
+
+<script>
+
+    $('._edit').click(function () {
+        if ($('#_edits').html() == "") {
+            var i = $(this).parent().parent().children().html();
+            $.ajax({
+                url: "/Records/Referrals/Edit?Id=" + i,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_edits").html(data);
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+                }
+            });
+        } else {
+            $('#_edits').empty();
+        }
+
+    });
+    $('#_add').click(function () {
+        if ($('#_adds').html() == "") {
+
+            $.ajax({
+                url: "/Records/Referrals/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_adds").html(data);
+
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+
+                }
+            });
+        } else {
+            $('#_adds').empty();
+        }
+    });
+
+    $('._detail').click(function () {
+
+        var i = $(this).parent().parent().children().html();
+        if ($('#' + i).attr('hidden') == 'hidden') {
+            $('#' + i).removeAttr('hidden');
+           
+        } else {
+            $('#' + i).attr('hidden','hidden');
+        }
+    });
+</script>

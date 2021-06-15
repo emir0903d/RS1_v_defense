@@ -1,0 +1,46 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model Partners.Details
+
+    <div class="container border-bottom">
+
+        <h3><strong class="text-uppercase">Add partner</strong></h3>
+        @using (Html.BeginForm("Save", "Partners", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="align-content-lg-around">
+                @Html.HiddenFor(Model => Model.MedicalRecordId, new { @class = "d-none" })
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Name, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.Name, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Name, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Surname, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.Surname, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Surname, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.BloodType, new { @class = "col-sm-12" })<br />
+                    @Html.DropDownListFor(Model => Model.BloodType, new SelectList(Model.BloodTypes, "Value", "Text"), "Select:", new { @class = "form-control", style = "width:120px;" })<br />
+                    @Html.ValidationMessageFor(Model => Model.BloodType, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.RHFactor, new { @class = "col-sm-12" })<br />
+                    @Html.DropDownListFor(Model => Model.RHFactor, new SelectList(Model.RhFactors, "Value", "Text"), "Select:", new { @class = "form-control", style = "width:120px;" })<br />
+                    @Html.ValidationMessageFor(Model => Model.RHFactor, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline">
+                    <button id="add_cancel" class="btn btn-small form-control">Cancel</button>
+                    <input type="submit" class="btn btn-small form-control" value="Save" />
+                </div>
+
+            </fieldset>
+        }
+
+    </div>
+<script>
+    $('#add_cancel').click(function () {
+
+        $(this).parent().parent().parent().parent().parent().empty();
+    });
+</script>

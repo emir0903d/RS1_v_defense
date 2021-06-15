@@ -1,0 +1,155 @@
+﻿@using PRENATALv2.Areas.Home.Models
+@model _profile;
+@{
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+
+<div class="container text-center">
+    <br />
+    @using (Html.BeginForm("SaveExisting", "Profile", FormMethod.Post, new { @style = "max-width:1000px;", @class = "form-group d-inline-block" }))
+    {
+        @Html.AntiForgeryToken();
+        <fieldset class="btn-group-vertical">
+            @Html.HiddenFor(Model => Model.Id)
+            <div class="container">
+                <div class="row row_head">
+                    <div class="col" style="width:250px;">Registration</div>
+                    <div class="col" style="width:250px;">Last login</div>
+                    <div class="col" style="width:150px;">#Logins</div>
+                    <div class="col" style="width:150px;">Email?</div>
+                    <div class="col" style="width:150px;">Phone#?</div>
+                    <div class="col" style="width:150px;">Two factor?</div>
+                </div>
+                <div class="row row_data">
+                    <div class="col" style="width:250px;">@Html.DisplayFor(Model => Model.RegDate, "", new { @type = "datetime", @class = "form-control" })</div>
+                    <div class="col" style="width:250px;">@Html.DisplayFor(Model => Model.LastLogin, "", new { @type = "datetime", @class = "form-control" })</div>
+                    <div class="col" style="width:150px;">@Html.DisplayFor(Model => Model.LoginCount, "", new { @type = "datetime", @class = "form-control" })</div>
+                    <div class="col" style="width:150px;">@Html.CheckBoxFor(Model => Model.EmailConfirmed, new { @readonly = true, @style = "width:20px; height:20px;", @class = "form-control d-inline align-middle" }) <a id="_validate_email" class="fas fa-envelope-open-text d-inline a_icon align-middle"></a></div>
+                    <div class="col" style="width:150px;">@Html.CheckBoxFor(Model => Model.PhoneConfirmed, new { @readonly = true, @class = "form-control d-inline align-middle", @style = "width:20px; height:20px;" }) <a id="_validate_phone" class="fas fa-sms d-inline a_icon align-middle"></a></div>
+                    <div class="col" style="width:150px;">@Html.CheckBoxFor(Model => Model.TwoFactor, new { @readonly = true, @class = "form-control d-inline align-middle", @style = "width:20px; height:20px;" }) <a id="_enable_2fa" class="fas fa-tasks d-inline a_icon align-middle"></a></div>
+                </div>
+            </div>
+            <br />
+            <div class="d-inline">
+
+                <label style="width:150px; text-align:right;" class="d-inline-block">Name</label>
+                @Html.EditorFor(model => model.Name, "", new { htmlAttributes = new { @style = "width:250px; background-color:white; border:0;", @readonly = "readonly", @class = "form-control d-inline" } })
+                <i class="fas fa-edit _change d-inline a_icon"></i><br />
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            <div class="d-inline-block">
+                <label style="width:150px; text-align:right;" class="d-inline-block">Surname</label>
+                @Html.EditorFor(model => model.Surname, "", new { htmlAttributes = new { @style = "width:250px; background-color:white; border:0;", @readonly = "readonly", @class = "form-control d-inline" } })
+                <i class="fas fa-edit _change d-inline a_icon"></i><br />
+                @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            <div class="d-inline-block">
+                <label style="width:150px; text-align:right;" class="d-inline-block">E-mail</label>
+
+                @Html.EditorFor(model => model.Email, "", new { htmlAttributes = new { @style = "width:250px; background-color:white; border:0;", @readonly = "readonly", @class = "form-control d-inline" } })
+                <i class="fas fa-edit _change d-inline a_icon"></i><br />
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                <div id="_validation_email" hidden></div>
+
+            </div>
+            <br />
+            <div class="d-inline-block">
+                <label style="width:150px; text-align:right;" class="d-inline-block">Phone number</label>
+
+                @Html.EditorFor(model => model.PhoneNumber, "", new { htmlAttributes = new { @style = "width:250px; background-color:white; border:0;", @readonly = "readonly", @class = "form-control d-inline" } })
+                <i class="fas fa-edit _change d-inline a_icon"></i><br />
+                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+
+                <div id="_validation_phone" hidden></div>
+
+
+            </div>
+            <br />
+            <div class="d-inline-block">
+                <input style="width:450px" class="btn btn-prenatal" id="_submit" type="submit" value="Save" disabled />
+            </div>
+
+        </fieldset>
+    }
+    <div id="_2fa">
+
+    </div>
+</div>
+
+<script>
+    $('#_enable_2fa').click(function () {
+        if ($('#_2fa').html() == "") {
+            $.ajax({
+                url: "/Home/TwoFactorAuth/EnableAuthenticator",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_2fa").html(data);
+                }
+
+            });
+        } else {
+            $('#_2fa').empty();
+        }
+        
+
+    });
+
+
+    $('#_validate_email').click(function () {
+        $('#_validation_email').removeAttr('hidden');
+
+
+        $.ajax({
+            url: "/Home/Profile/ConfEmail?Id=@Model.Id",
+            type: "GET",
+            dataType: "html",
+            success: function (data) {
+                $("#_validation_email").html(data);
+            }
+
+        });
+
+    });
+
+    $('#_validate_phone').click(function () {
+        $('#_validation_phone').removeAttr('hidden');
+
+        if ($('#_validation_phone').html() == "") {
+            $.ajax({
+                url: "/Home/Profile/ConfPhone?Id=@Model.Id",
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_validation_phone").html(data);
+                }
+            });
+        }
+
+    });
+
+
+    $('._change').click(function () {
+        if ($(this).parent().children()[1].getAttribute('readonly') != null) {
+
+            $(this).parent().children()[1].removeAttribute('readonly');
+            $(this).parent().children()[1].style = 'background-color:lightgrey; width:200px;';
+
+            $('#_submit').removeAttr('disabled');
+        }
+        else {
+
+            $(this).parent().children()[1].setAttribute('readonly', 'readonly');
+            $(this).parent().children()[1].style = 'background-color:white; width:200px;';
+
+            $('#_submit').attr('disabled', 'disabled');
+        }
+
+    });
+
+</script>

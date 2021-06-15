@@ -1,0 +1,59 @@
+﻿<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+@model int
+@{
+    Layout = "_Layout";
+}
+@Html.AntiForgeryToken()
+<script type="text/javascript">
+
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var jsonData = $.ajax({
+                url: "/Home/Charts/GetVSdata?Id=@Model",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            var data = new google.visualization.DataTable(jsonData);
+
+            data = google.visualization.arrayToDataTable($.parseJSON(jsonData));
+
+
+            var options = {
+                title: 'Histogram of VitalSigns',
+                legend: { position: 'top', maxLines: 8 },
+                hAxis: {
+                    title: 'date'
+                },
+                isStacked: true,
+                orientation: 'horizontal',
+                series: {
+                    0: { color: 'black', visibleInLegend: true },
+                    1: { color: 'red', visibleInLegend: true },
+                    2: { color: 'black', visibleInLegend: true },
+                    3: { color: 'red', visibleInLegend: true },
+                    4: { color: 'black', visibleInLegend: true },
+                    5: { color: 'red', visibleInLegend: true },
+                    6: { color: 'black', visibleInLegend: true },
+                    7: { color: 'red', visibleInLegend: true },
+                    8: { color: 'black', visibleInLegend: true }
+                },
+                vAxes:{
+                    series: {
+                        2: {
+                            targetAxisIndex: 1
+                        }
+                    }
+                }
+            };
+
+                var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+                chart.draw(data, options);
+        }
+</script>
+
+
+<div id="chart_div" style="width: 900px; height: 500px;"></div>

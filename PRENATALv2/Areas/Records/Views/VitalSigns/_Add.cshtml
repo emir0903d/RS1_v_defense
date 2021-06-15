@@ -1,0 +1,72 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model VitalSignsMR.Details
+
+    <div class="container border-bottom">
+
+        <h3><strong class="text-uppercase">Add vitalsigns</strong></h3>
+        @using (Html.BeginForm("Save", "VitalSigns", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="align-content-lg-around">
+                @Html.HiddenFor(Model => Model.MedicalRecordId, new { @class = "d-none" })
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Date, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.Date, new { @type = "date", @class = " datepicker form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Date, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Temperature, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.Temperature, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Temperature, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.SystolicPressure, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.SystolicPressure, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.SystolicPressure, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.DiastolicPressure, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.DiastolicPressure, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.DiastolicPressure, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.HeartBeats, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.HeartBeats, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.HeartBeats, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.RespiratoryRate, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.RespiratoryRate, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.RespiratoryRate, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Height, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.Height, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Height, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Weight, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.Weight, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Weight, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Note, new { @class = "col-sm-12" })<br />
+                    @Html.TextAreaFor(Model => Model.Note, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Note, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline">
+                    <button id="add_cancel" class="btn btn-small form-control">Cancel</button>
+                    <input type="submit" class="btn btn-small form-control" value="Save" />
+                </div>
+
+            </fieldset>
+        }
+
+    </div>
+<script>
+    $('#add_cancel').click(function () {
+
+        $(this).parent().parent().parent().parent().parent().empty();
+    });
+</script>

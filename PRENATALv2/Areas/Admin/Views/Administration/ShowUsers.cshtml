@@ -1,0 +1,41 @@
+﻿@using PRENATALv2.Areas.Home.Models
+@model List<AppUser>
+@{
+    ViewData["Title"] = "ShowUsers";
+}
+@{
+    Layout = "_Layout";
+}
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        <a href="/Admin/Administration/AddUser" style="vertical-align:middle; font-size:20px;" class="btn fas fa-plus-square d-inline a_icon"></a>
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">All users:</strong></h5>
+    </div>
+
+
+    <table class="table">
+        <tr><th>Id</th><th>Name</th><th>Surname</th><th>UserName</th><th>E-mail</th><th>Confirmed?</th><th>PhoneNumber</th><th>Confirmed?</th><th>Status</th><th>Type</th><th>Actions</th></tr>
+        @foreach (AppUser x in Model)
+        {
+            <tr>
+                <td>@x.Id</td>
+                <td>@x.Name</td>
+                <td>@x.Surname</td>
+                <td>@x.UserName</td>
+                <td>@x.Email</td>
+                <td>@x.EmailConfirmed</td>
+                <td>@x.PhoneNumber</td>
+                <td>@x.PhoneNumberConfirmed</td>
+                <td>@x.Status <a class="far fa-thumbs-up a_icon" href="/Admin/Administration/ApproveReject?UserId=@x.Id"></a></td>
+                <td>@x.Type</td>
+                <td><a href="EditUser?UserId=@x.Id" class="fas fa-edit a_icon"></a> <a href="DeleteUser?UserId=@x.Id" class="fas fa-trash-alt a_icon"></a></td>
+            </tr>
+        }
+
+    </table>
+
+</div>

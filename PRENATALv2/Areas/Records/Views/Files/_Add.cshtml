@@ -1,0 +1,20 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model FilesMR
+<div class="container">
+    @using (Html.BeginForm("Save", "Files", FormMethod.Post, new {@class="form-group", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <fieldset>
+            @Html.HiddenFor(Model=>Model.MedicalRecordId)
+            <div class="form-group">
+                <label class="form-control">Browse:</label>
+                
+                <input class="form-control" type="file" id="photos" name="photos" multiple="multiple" />
+                
+            </div>
+            <input class="btn btn-prenatal" type="submit" value="Upload File(s)" />
+        </fieldset>
+        
+    }
+
+</div>

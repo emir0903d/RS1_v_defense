@@ -1,0 +1,102 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model MR
+@{
+    Layout = "_Layout";
+}
+
+    <div class="container">
+        <h3><strong class="text-uppercase">Add medical record</strong></h3>
+        @using (Html.BeginForm("SaveNew", "MedicalRecords", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="align-content-lg-around">
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.MedicalRecordNumber, new { @class = "col-sm-12", })
+                    @Html.DisplayFor(Model => Model.MedicalRecordNumber, new { @class = "thead-light col-sm-12" })
+                    @Html.HiddenFor(Model => Model.MedicalRecordNumber, new { @class = "d-none" })
+                </div>
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.DoctorId, new { @class = "col-sm-12", })
+                    @Html.DisplayFor(Model => Model.DoctorId, new { @class = "col-sm-12" })
+                    @Html.HiddenFor(Model => Model.DoctorId)
+                </div>
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Doctor, new { @class = "col-sm-12", })
+                    @Html.DisplayFor(Model => Model.Doctor, new { @class = "col-sm-12" })
+                    @Html.HiddenFor(Model => Model.Doctor)
+                </div>
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Id, new { @class = "col-sm-12", })
+                    @Html.DisplayFor(Model => Model.Id, new { @class = "col-sm-12" })
+                    @Html.HiddenFor(Model => Model.Id)
+                </div>
+                <br />
+                <hr />
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Name, new { @class = "col-sm-12", })
+                    @Html.DisplayFor(Model => Model.Name, new { @class = "col-sm-12" })
+                </div>
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Surname, new { @class = "col-sm-12", })
+                    @Html.DisplayFor(Model => Model.Surname, new { @class = "col-sm-12" })
+                </div>
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Email, new { @class = "col-sm-12", })
+                    @Html.DisplayFor(Model => Model.Email, new { @class = "col-sm-12" })
+                </div>
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.PhoneNumber, new { @class = "col-sm-12", })
+                    @Html.DisplayFor(Model => Model.PhoneNumber, new { @class = "col-sm-12" })
+                </div>
+                <br />
+                <hr />
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.MartialStatus, new { @class = "col-sm-12", style = "width:200px;" })
+                    @Html.DropDownListFor(model => model.MartialStatus, new SelectList(Model.StatusList, "Value", "Text"), "MartialStatus:", new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(model => model.MartialStatus, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.BloodType, new { @class = "col-sm-12" })
+                    @Html.DropDownListFor(model => model.BloodType, new SelectList(Model.BloodTypes, "Value", "Text"), "BloodType:", new { @class = "form-control", style = "width:200px;" })<br />
+                    @Html.ValidationMessageFor(model => model.BloodType, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.RhFactor, new { @class = "col-sm-12" })
+                    @Html.DropDownListFor(model => model.RhFactor, new SelectList(Model.RhFactors, "Value", "Text"), "RhFactor:", new { @class = "form-control", style = "width:200px;" })<br />
+                    @Html.ValidationMessageFor(model => model.BloodType, "", new { @class = "text-danger" })
+                </div>
+
+                <br />
+                <hr />
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.BirthDate, new { @class = "col-sm-12" })
+                    @Html.EditorFor(model => model.BirthDate, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.MaidenName, new { @class = "col-sm-12" })
+                    @Html.EditorFor(model => model.MaidenName, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(model => model.MaidenName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.PersonalIdentificationNumber, new { @class = "col-sm-12" })
+                    @Html.EditorFor(model => model.PersonalIdentificationNumber, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(model => model.PersonalIdentificationNumber, "", new { @class = "text-danger" })
+                </div>
+
+                <br />
+                <hr />
+                <div class="d-inline"><input type="submit" class="form-control btn btn-small" value="Save" /></div>
+            </fieldset>
+        }
+    </div>
+

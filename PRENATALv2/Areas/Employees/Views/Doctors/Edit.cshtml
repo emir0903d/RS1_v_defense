@@ -1,0 +1,47 @@
+﻿@using PRENATALv2.Areas.Admin.Models
+@model EditUser
+@{
+    Layout = "_Layout";
+}
+
+    <div class="container">
+        <h3><strong class="text-uppercase">Edit doctor:</strong></h3>
+
+        @using (Html.BeginForm("SaveExisting", "Doctors", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="btn-group-vertical align-content-md-around">
+                @Html.HiddenFor(Model => Model.Id)
+                @*@Html.LabelFor(Model => Model.Id, new { @class = "col-sm-12" })
+                @Html.DisplayFor(Model => Model.Id, "", new { @class = "form-control" })*@
+
+                @Html.HiddenFor(Model => Model.UserName)
+                @*@Html.LabelFor(Model => Model.UserName, new { @class = "col-sm-12" })
+                @Html.DisplayFor(Model => Model.UserName, "", new { @class = "form-control" })<br />*@
+
+                @Html.LabelFor(Model => Model.Name, new { @class = "col-sm-12" })
+                @Html.EditorFor(Model => Model.Name, "", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(Model => Model.Name, "", new { @class = "text-danger" })<br />
+
+                @Html.LabelFor(Model => Model.Surname, new { @class = "col-sm-12" })
+                @Html.EditorFor(Model => Model.Surname, "", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(Model => Model.Surname, "", new { @class = "text-danger" })<br />
+
+                @Html.LabelFor(Model => Model.Email, new { @class = "col-sm-12" })
+                @Html.EditorFor(Model => Model.Email, "", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(Model => Model.Email, "", new { @class = "text-danger" })<br />
+
+                @Html.LabelFor(Model => Model.PhoneNumber, new { @class = "col-sm-12" })
+                @Html.EditorFor(Model => Model.PhoneNumber, "", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(Model => Model.PhoneNumber, "", new { @class = "text-danger" })<br />
+
+                @Html.LabelFor(Model => Model.Gender, new { @class = "col-sm-12" })
+                @Html.DropDownListFor(Model => Model.Gender, new SelectList(Model.Gender_List, "Value", "Text", Model.Gender), "", new { @class = "form-control", style = "width:200px;" })
+                @Html.ValidationMessageFor(Model => Model.Gender, "", new { @class = "text-danger" })<br />
+
+                <input type="submit" class="btn btn-prenatal" value="Save" />
+            </fieldset>
+        }
+    </div>
+
+

@@ -1,0 +1,26 @@
+﻿@using PRENATALv2.Areas.Home.Models
+@model _recoveryCodes
+@{
+    Layout = "_Layout";
+}
+@Html.AntiForgeryToken();
+<div class="container">
+    <div class="alert alert-warning" role="alert">
+        <p>
+            <span class="glyphicon glyphicon-warning-sign"></span>
+            <strong>Put these codes in a safe place.</strong>
+        </p>
+        <p>
+            If you lose your device and don't have the recovery codes you will lose access to your account.
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @for (int i = 0; i < @Model.RecoveryCodes.Length; i++)
+            {
+                <code>@Model.RecoveryCodes[i]</code><br />
+            }
+        </div>
+    </div>
+</div>
+

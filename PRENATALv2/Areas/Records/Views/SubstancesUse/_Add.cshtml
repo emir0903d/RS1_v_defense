@@ -1,0 +1,55 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model SubstancesUseMR.Details
+
+    <div class="container border-bottom">
+
+        <h3><strong class="text-uppercase">Add substance</strong></h3>
+        @using (Html.BeginForm("Save", "SubstancesUse", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="align-content-lg-around">
+                @Html.HiddenFor(Model => Model.MedicalRecordId, new { @class = "d-none" })
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Description, new { @class = "col-sm-12" })<br />
+                    @Html.TextAreaFor(Model => Model.Description, new { @class = "form-control", style = "width:400px;" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Description, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Note, new { @class = "col-sm-12" })<br />
+                    @Html.TextAreaFor(Model => Model.Note, new { @class = "form-control", style = "width:400px;" })<br />
+                    @Html.ValidationMessageFor(Model => Model.Note, "", new { @class = "text-danger" })
+                </div>
+                <br /><hr />
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.PriorToPregnancy, new { @class = "col-sm-12" })<br />
+                    @Html.CheckBoxFor(Model => Model.PriorToPregnancy, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.PriorToPregnancy, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.StillUsing, new { @class = "col-sm-12" })<br />
+                    @Html.CheckBoxFor(Model => Model.StillUsing, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.StillUsing, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.NumberOfYears, new { @class = "col-sm-12" })<br />
+                    @Html.TextBoxFor(Model => Model.NumberOfYears, new { @class = "form-control" })<br />
+                    @Html.ValidationMessageFor(Model => Model.NumberOfYears, "", new { @class = "text-danger" })
+                </div>
+
+
+
+                <div class="d-inline">
+                    <button id="add_cancel" class="btn btn-small form-control">Cancel</button>
+                    <input type="submit" class="btn btn-small form-control" value="Save" />
+                </div>
+
+            </fieldset>
+        }
+
+    </div>
+<script>
+    $('#add_cancel').click(function () {
+
+        $(this).parent().parent().parent().parent().parent().empty();
+    });
+</script>

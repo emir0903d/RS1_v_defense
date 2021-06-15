@@ -1,0 +1,77 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model ReferralsMR.Details
+
+
+    <div class="container border-bottom">
+        <h3><strong class="text-uppercase">Edit referral</strong></h3>
+        @using (Html.BeginForm("SaveExisting", "Referrals", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+            @for (int i = 0; i < Model.BloodExams.Count(); i++)
+            {
+                @Html.HiddenFor(Model => Model.BloodExams[i].Id)
+                @Html.HiddenFor(Model => Model.BloodExams[i].Unit)
+                @Html.HiddenFor(Model => Model.BloodExams[i].Low)
+                @Html.HiddenFor(Model => Model.BloodExams[i].High)
+                @Html.HiddenFor(Model => Model.BloodExams[i].BloodTest)
+
+            }
+            @for (int i = 0; i < Model.UrineExams.Count(); i++)
+            {
+                @Html.HiddenFor(Model => Model.UrineExams[i].Id)
+                @Html.HiddenFor(Model => Model.UrineExams[i].UrineTest)
+                @Html.HiddenFor(Model => Model.UrineExams[i].Unit)
+                @Html.HiddenFor(Model => Model.UrineExams[i].ReferenceInterval)
+
+            }
+
+            <fieldset class="align-content-lg-around">
+
+                @Html.HiddenFor(Model => Model.MedicalRecordId, new { @class = "d-none" })
+                @Html.HiddenFor(Model => Model.Id, new { @class = "d-none" })
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Date, new { @class = "col-sm-12" })
+                    @Html.EditorFor(Model => Model.Date, new { htmlAttributes = new { @type = "date", @class = "form-control datepicker" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.Date, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Note, new { @class = "col-sm-12" })
+                    @Html.EditorFor(Model => Model.Note, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.Note, "", new { @class = "text-danger" })
+                </div>
+                <br />
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.BloodExamsSelected, new { @class = "col-sm-12" })
+                    @Html.ListBoxFor(Model => Model.BloodExamsSelected, new MultiSelectList(Model.BloodExams, "BloodTest", "BloodTest", Model._dbBloodExams), new { @style = "height:200px; width:200px; text-align:center;", @name = "MSL1", @class = "form-control", @multiple = "multiple" })<br />
+                    @Html.ValidationMessageFor(Model => Model.BloodExamsSelected, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.UrineExamsSelected, new { @class = "col-sm-12" })
+                    @Html.ListBoxFor(Model => Model.UrineExamsSelected, new MultiSelectList(Model.UrineExams, "UrineTest", "UrineTest", Model._dbUrineExams), new { @style = "height:200px; width:200px; text-align:center;", @name = "MSL2", @class = "form-control", @multiple = "multiple" })<br />
+                    @Html.ValidationMessageFor(Model => Model.UrineExamsSelected, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline">
+                    <button id="edit_cancel" class="btn btn-small form-control">Cancel</button>
+                    <input type="submit" class="btn btn-small form-control" value="Save" />
+                </div>
+            </fieldset>
+        }
+    </div>
+<script>
+    $('#edit_cancel').click(function () {
+        $(this).parent().parent().parent().parent().parent().empty();
+    });
+
+    //$(document).ready(function () {
+    //    //var [] blood = @Html.Raw(Model._dbBloodExams.ToArray());
+        
+    //    //@*var urine = @Model._dbUrineExams.ToArray();*@
+    //    var i = 0;
+    //    $('option').each(function () {
+    //        if ($('option').val() == blood[i].val()) {
+    //            $('option').attr('selected', 'selected');
+    //        }
+    //    })
+    //});
+</script>

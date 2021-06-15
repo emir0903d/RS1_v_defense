@@ -1,0 +1,44 @@
+﻿@using PRENATALv2.Areas.Home.Models
+@{
+    Layout = "_Anonymous";
+}
+@{
+    ViewData["Title"] = "Index";
+}
+@model Login
+
+<div class="front-container" style="vertical-align:middle">
+    <img src="~/images/baby1.jpg" class="front-img" style="vertical-align:middle" />
+
+
+    <div class="front-group" style="vertical-align:middle">
+
+
+        @using (Html.BeginForm("LoginAttempt", "Account", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken()
+            <fieldset class="btn-group-vertical align-content-md-around">
+                <h6>Sign-in:</h6>
+                <label>username: </label>
+                @Html.TextBoxFor(model => model.Username, new { @class = "form-group" })<br />
+
+                <label>password: </label>
+                @Html.TextBoxFor(model => model.Password, new { @class = "form-group", type = "Password" })<br />
+
+                <input type="submit" class="btn btn-prenatal" value="Login" />
+                <br />
+                @Html.ActionLink("Forgot password?", "AccessDenied", "Account", new { area = "Home" }, new { @class = "btn btn-prenatal" })
+                <br />
+                @Html.ActionLink("Register", "Register", "Account", new { area = "Home" }, new { @class = "btn btn-prenatal" })
+            </fieldset>
+        }
+        <p style="font-size:10px; color:red"><strong>FOR NEWLY REGISTERED USERS: USERNAME & PASSWORD IS SENT BY E-MAIL!</strong></p>
+        <p style="font-size:10px; color:red"><strong>FOR CREATED USERS: USERNAME:(LASTNAME+1ST-LETTER-OF-NAME); PASSWORD:P!123456</strong></p>
+        <p style="font-size:10px; color:red">1) admin, Admin!12</p>
+        <p style="font-size:10px; color:red">2) doctord, Pp!12345</p>
+        <p style="font-size:10px; color:red">3) nursen, Pp!12345</p>
+        <p style="font-size:10px; color:red">4) patientp, Pp!12345</p>
+    </div>
+
+
+</div>

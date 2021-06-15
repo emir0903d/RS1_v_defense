@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewData["Title"] = "Message";
+}
+
+    <div class="container">
+        @Html.AntiForgeryToken()
+        <h5><strong class="text-uppercase">@ViewBag.Msg</strong></h5>
+    </div>
+

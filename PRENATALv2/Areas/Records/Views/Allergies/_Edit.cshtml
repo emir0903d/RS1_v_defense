@@ -1,0 +1,37 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model AllergiesMR.Details
+
+    <div class="container border-bottom">
+        <h3><strong class="text-uppercase">Edit allergy</strong></h3>
+        @using (Html.BeginForm("SaveExisting", "Allergies", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+
+            <fieldset class="align-content-lg-around">
+
+                @Html.HiddenFor(Model => Model.MedicalRecordId, new { @class = "d-none" })
+                @Html.HiddenFor(Model => Model.Id, new { @class = "d-none" })
+
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Type, new { @class = "col-sm-12" })
+                    @Html.EditorFor(Model => Model.Type, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.Type, "", new { @class = "text-danger" })
+                </div>
+                <div class="d-inline-block">
+                    @Html.LabelFor(Model => Model.Note, new { @class = "col-sm-12" })
+                    @Html.EditorFor(Model => Model.Note, new { htmlAttributes = new { @class = "form-control" } })<br />
+                    @Html.ValidationMessageFor(Model => Model.Note, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-inline">
+                    <button id="edit_cancel" class="btn btn-small form-control">Cancel</button>
+                    <input type="submit" class="btn btn-small form-control" value="Save" />
+                </div>
+            </fieldset>
+        }
+    </div>
+<script>
+    $('#edit_cancel').click(function () {
+        $(this).parent().parent().parent().parent().parent().empty();
+    });
+</script>

@@ -1,0 +1,120 @@
+﻿@using PRENATALv2.Areas.Records.Models;
+@model VitalSignsMR
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+            {
+                <button style="vertical-align:middle; font-size:20px;" id="_vitalsign_add" class="btn fas fa-plus-square d-inline"></button>
+            }
+        }
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">VitalSigns:</strong></h5>
+    </div>
+
+    @{
+        if (Model.VitalSigns.Count > 0)
+        {
+            <div class="container">
+                <div class="row row_head">
+                    <div class="col" hidden>Id</div>
+                    <div class="col">Date</div>
+                    <div class="col">Temperature</div>
+                    <div class="col">SystolicPressure</div>
+                    <div class="col">DiastolicPressure</div>
+                    <div class="col">HeartBeats</div>
+                    <div class="col">RespiratoryRate</div>
+                    <div class="col">Heigh</div>
+                    <div class="col">Weight</div>
+                    <div class="col">Note</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+
+                    <div class="col">Actions</div>
+                </div>
+
+                @foreach (VitalSignsMR.Details x in Model.VitalSigns)
+                {
+                    <div class="row row_data">
+                        <div class="col" hidden>@x.Id</div>
+                        <div class="col">@x.Date.ToShortDateString()</div>
+                        <div class="col">@x.Temperature</div>
+                        <div class="col">@x.SystolicPressure</div>
+                        <div class="col">@x.DiastolicPressure</div>
+                        <div class="col">@x.HeartBeats</div>
+                        <div class="col">@x.RespiratoryRate</div>
+                        <div class="col">@x.Height</div>
+                        <div class="col">@x.Weight</div>
+                        <div class="col">@x.Note</div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col">
+                            @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+                                {
+                                    <i style="font-size:20px;" class="_vitalsign_edit fas fa-edit a_icon"></i>
+                                    <a style="font-size:20px;" class="_vitalsign_delete fas fa-trash-alt a_icon" href="/Records/Ultrasounds/Delete?Id=@x.Id"></a>
+                                }
+                                else
+                                {
+                                    <span>N/A</span>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                }
+            </div>
+
+        }
+
+    }
+    <div class="container" id="_vitalsigns_add"></div>
+    <div class="container" id="_vitalsigns_edit"></div>
+</div>
+
+
+<script>
+    $('._vitalsign_edit').click(function () {
+        if ($('#_vitalsigns_edit').html() == "") {
+            var i = $(this).parent().parent().children().html();
+            $.ajax({
+                url: "/Records/VitalSigns/Edit?Id=" + i,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_vitalsigns_edit").html(data);
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+                }
+            });
+        } else {
+            $('#_vitalsigns_edit').empty();
+        }
+
+    });
+    $('#_vitalsign_add').click(function () {
+            if ($('#_vitalsigns_add').html() == "") {
+
+            $.ajax({
+                url: "/Records/VitalSigns/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_vitalsigns_add").html(data);
+
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+
+                }
+            });
+        } else {
+                $('#_vitalsigns_add').empty();
+        }
+    });
+</script>

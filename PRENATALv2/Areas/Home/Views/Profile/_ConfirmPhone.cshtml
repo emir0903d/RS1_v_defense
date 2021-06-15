@@ -1,0 +1,18 @@
+﻿@using PRENATALv2.Areas.Home.Models
+@model _confirmPhone
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="_valid">
+    <hr style="width:420px;" />
+    @using (Html.BeginForm("AttemptConfirmPhone", "Profile", FormMethod.Post, new { @class = "form-group" }))
+    {
+        @Html.AntiForgeryToken();
+        <fieldset>
+            @Html.HiddenFor(Model => Model.Id)
+            @Html.HiddenFor(Model => Model.PhoneNumber)
+            @Html.TextBoxFor(Model => Model.Code, "", new { @style = "width:400px", @class = "form-control d-inline" })
+            <button type="submit" class="fas fa-check-double d-inline a_icon align-middle" style="border:0; background-color:white; width:20px; height:20px;" />
+        </fieldset>
+    }
+    <hr style="width:420px;" />
+</div>

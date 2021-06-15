@@ -1,0 +1,33 @@
+﻿@using PRENATALv2.Areas.Home.Models
+
+@model Login
+@{
+    Layout = "_Anonymous";
+}
+
+    <div class="container">
+        @{
+            if (ViewBag.Msg != "")
+            {
+                <div><h3><strong class="text-uppercase" style="color:red">@ViewBag.Msg</strong></h3></div>
+            }
+        }
+        <h3><strong class="text-uppercase">Login</strong></h3>
+
+        @using (Html.BeginForm("LoginAttempt", "Account", FormMethod.Post, new { @class = "form-group" }))
+        {
+            
+            <fieldset>
+                @Html.AntiForgeryToken();
+                <label>username: </label>
+                @Html.TextBoxFor(model => model.Username, new { @class = "form-group" })<br />
+
+                <label>password: </label>
+                @Html.TextBoxFor(model => model.Password, new { @class = "form-group", type = "Password" })<br />
+
+                @*<label>Remember Client?</label>
+                @Html.CheckBoxFor(Model=>Model.RememberClient, new { @class="form-control", @style="width:20px;"})<br />*@
+                <input type="submit" class="btn btn-dark" value="Login" />
+            </fieldset>
+        }
+    </div>

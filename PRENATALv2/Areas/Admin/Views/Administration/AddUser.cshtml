@@ -1,0 +1,68 @@
+﻿@using PRENATALv2.Areas.Home.Models
+
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "AddUser";
+}
+@model Register
+
+
+    <div class="container">
+
+        <h3><strong class="text-uppercase">Add a new user:</strong></h3>
+
+        @using (Html.BeginForm("SaveNewUser", "Administration", FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken();
+            <fieldset class="btn-group-vertical align-content-md-around">
+                <label>Name:</label>
+                @Html.TextBoxFor(Model => Model.Name, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model.Name, "", new { @class = "text-danger" })<br />
+
+                <label>Surname:</label>
+                @Html.TextBoxFor(Model => Model.Surname, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model.Surname, "", new { @class = "text-danger" })<br />
+
+                <label>E-mail:</label>
+                @Html.TextBoxFor(Model => Model.Email, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model.Email, "", new { @class = "text-danger" })<br />
+
+                <label>PhoneNumber:</label>
+                @Html.TextBoxFor(Model => Model.PhoneNumber, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model.PhoneNumber, "", new { @class = "text-danger" })<br />
+
+                <label>Gender:</label>
+                @Html.DropDownListFor(model => model.Gender, new SelectList(Model.Gender_List, "Value", "Text"), "Choose:", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })<br />
+
+                <label>Account type:</label>
+                @Html.DropDownListFor(model => model.Type, new SelectList(Model.Type_List, "Value", "Text"), "Choose:",
+               new { @Id = "Type", @onchange = "IsPatient();", @class = "form-control", style = "width:200px;" })<br />
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+
+                <div id="hidden_options" hidden name="hidden_options">
+                    <label>Doctor:</label>
+                    @Html.DropDownListFor(model => model.DoctorId, new SelectList(Model.Doctors, "Value", "Text"), "Choose account type:", new { @class = "form-control", style = "width:200px;" })<br />
+                    @Html.ValidationMessageFor(model => model.DoctorId, "", new { @class = "text-danger" })
+                </div>
+
+                <br />
+                <input type="submit" class="btn btn-prenatal" value="Create" />
+            </fieldset>
+        }
+
+    </div>
+<script>
+    function IsPatient() {
+
+        if ($('#Type').val() == "3") {
+            $('#hidden_options').removeAttr('hidden');
+        }
+        else {
+            $('#hidden_options').attr("hidden", true);
+
+        }
+    }
+</script>

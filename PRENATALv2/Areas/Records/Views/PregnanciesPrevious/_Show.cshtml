@@ -1,0 +1,126 @@
+﻿@using PRENATALv2.Areas.Records.Models;
+@model PregnanciesPreviousMR
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+            {
+                <button style="vertical-align:middle; font-size:20px;" id="_pregnancyprevious_add" class="btn fas fa-plus-square d-inline"></button>
+            }
+        }
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Prev.Pregnancies:</strong></h5>
+    </div>
+
+    @{
+        if (Model.Pregnancies.Count > 0)
+        {
+
+            <div class="container">
+
+
+                <div class="row row_head">
+                    <div class="col" hidden>Id</div>
+                    <div class="col">Date</div>
+                    <div class="col">GestationWeeks</div>
+                    <div class="col">DeliveryType</div>
+                    <div class="col">Complications</div>
+                    <div class="col">Outcome</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+
+                    <div class="col">Actions</div>
+                </div>
+
+
+
+                @foreach (PregnanciesPreviousMR.Details x in Model.Pregnancies)
+                {
+
+                    <div class="row row_data">
+                        <div class="col" hidden>@x.Id</div>
+                        <div class="col">@x.PregnancyDate.ToShortDateString()</div>
+                        <div class="col">@x.GestationWeeks</div>
+                        <div class="col">@x.DeliveryType</div>
+                        <div class="col">@x.Complications</div>
+                        <div class="col">@x.Outcome</div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+
+                        <div class="col">
+                            @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+                                {
+                                    <i style="font-size:20px;" class="_pregnancyprevious_edit fas fa-edit a_icon"></i>
+                                    <a style="font-size:20px;" class="_pregnancyprevious_delete fas fa-trash-alt a_icon" href="/Records/PregnanciesPrevious/Delete?Id=@x.Id"></a>
+                                }
+                                else
+                                { <div>N/A</div>}
+                            }
+
+                        </div>
+                    </div>
+
+
+                }
+
+            </div>
+
+        }
+
+    }
+    <div class="container" id="_pregnanciesprevious_add"></div>
+    <div class="container" id="_pregnanciesprevious_edit"></div>
+</div>
+
+
+<script>
+        $('._pregnancyprevious_edit').click(function () {
+            if ($('#_pregnanciesprevious_edit').html() == "") {
+            var i = $(this).parent().parent().children().html();
+            $.ajax({
+                url: "/Records/PregnanciesPrevious/Edit?Id=" + i,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_pregnanciesprevious_edit").html(data);
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+                }
+            });
+        } else {
+                $('#_pregnanciesprevious_edit').empty();
+        }
+
+    });
+        $('#_pregnancyprevious_add').click(function () {
+        if ($('#_pregnanciesprevious_add').html() == "") {
+
+            $.ajax({
+                url: "/Records/PregnanciesPrevious/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_pregnanciesprevious_add").html(data);
+
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+
+                }
+            });
+        } else {
+            $('#_pregnanciesprevious_add').empty();
+        }
+    });
+</script>

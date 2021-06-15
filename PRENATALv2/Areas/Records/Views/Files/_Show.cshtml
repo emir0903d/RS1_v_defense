@@ -1,0 +1,83 @@
+﻿@using PRENATALv2.Areas.Records.Models
+@model FilesMR
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+@Html.AntiForgeryToken();
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+        {
+            <button style="vertical-align:middle; font-size:20px;" id="_add" class="btn fas fa-plus-square d-inline"></button>
+        }
+
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Files:</strong></h5>
+    </div>
+    @if (Model.Files.Count() > 0)
+    {
+        <div class="row">
+            <div hidden class="col">Id</div>
+            <div class="col">Name</div>
+            <div class="col">Type</div>
+            <div class="col">Date</div>
+            <div class="col">Actions</div>
+        </div>
+
+        @foreach (FilesMR.Details x in Model.Files)
+        {
+            <div class="row">
+                <div hidden class="col">@x.Id</div>
+                <div class="col">@x.Name</div>
+                <div class="col">@x.Type</div>
+                <div class="col">@x.Date</div>
+                <div class="col">
+                    <a class="_show fas fa-file-alt a_icon" href="/Records/Files/GetFile?Id=@x.Id"></a>
+                    <a style="font-size:20px;" class="_delete fas fa-trash-alt a_icon" href="/Records/Files/Delete?Id=@x.Id"></a>
+                </div>
+            </div>
+
+        }
+    }
+
+</div>
+<div class="container" id="_shows"></div>
+<div class="container" id="_adds"></div>
+<script>
+
+    $('#_add').click(function () {
+        if ($('#_adds').html() == "") {
+
+            $.ajax({
+                url: "/Records/Files/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_adds").html(data);
+
+                }
+
+            });
+        } else {
+            $('#_adds').empty();
+        }
+    });
+
+    //$('._show').click(function () {
+    //    if ($('#_shows').html() == "") {
+            
+    //        var i = $(this).parent().parent().children().html();
+    //        console.log(i);
+    //        $.ajax({
+    //            url: "/Records/Files/GetFile?Id=" + i,
+    //            type: "GET",
+    //            dataType: "html",
+    //            success: function (data) {
+    //                $("#_shows").html(data);
+    //            }
+    //        });
+    //    } else {
+    //        $('#_shows').empty();
+    //    }
+
+    //});
+</script>

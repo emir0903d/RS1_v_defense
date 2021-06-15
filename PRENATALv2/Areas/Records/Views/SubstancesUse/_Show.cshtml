@@ -1,0 +1,126 @@
+﻿@using PRENATALv2.Areas.Records.Models;
+@model SubstancesUseMR
+@Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+<div class="container">
+    <div class="text-left" style="vertical-align:middle;">
+        @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+            {
+                <button style="vertical-align:middle; font-size:20px;" id="_substance_add" class="btn fas fa-plus-square d-inline"></button>
+            }
+        }
+
+
+        <h5 style="vertical-align:middle;" class="d-inline"><strong class="text-uppercase">Substances:</strong></h5>
+    </div>
+
+    @{
+        if (Model.Substances.Count > 0)
+        {
+
+            <div class="container">
+
+                <div class="row row_head">
+                    <div class="col" hidden>Id</div>
+                    <div class="col">Description</div>
+
+                    <div class="col">PriorToPregnancy?</div>
+                    <div class="col">NumberOfYears</div>
+                    <div class="col">StillUsing?</div>
+                    <div class="col">Note</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+
+                    <div class="col">Actions</div>
+                </div>
+
+                @foreach (SubstancesUseMR.Details x in Model.Substances)
+                {
+
+                    <div class="row row_data">
+                        <div class="col" hidden>@x.Id</div>
+                        <div class="col">@x.Description</div>
+
+                        <div class="col">@x.PriorToPregnancy</div>
+                        <div class="col">@x.NumberOfYears</div>
+                        <div class="col">@x.StillUsing</div>
+                        <div class="col">@x.Note</div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+
+                        <div class="col">
+                            @{ if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+                                {
+                                    <i style="font-size:20px;" class="_substance_edit fas fa-edit a_icon"></i>
+                                    <a style="font-size:20px;" class="_substance_delete fas fa-trash-alt a_icon" href="/Records/SubstancesUse/Delete?Id=@x.Id"></a>
+                                }
+                                else
+                                { <div>N/A</div>}
+                            }
+
+                        </div>
+                    </div>
+
+
+                }
+
+            </div>
+
+        }
+
+    }
+    <div class="container" id="_substances_add"></div>
+    <div class="container" id="_substances_edit"></div>
+</div>
+
+
+<script>
+    $('._substance_edit').click(function () {
+        if ($('#_substances_edit').html() == "") {
+            var i = $(this).parent().parent().children().html();
+            $.ajax({
+                url: "/Records/SubstancesUse/Edit?Id=" + i,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+                    $("#_substances_edit").html(data);
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+                }
+            });
+        } else {
+            $('#_substances_edit').empty();
+        }
+
+    });
+    $('#_substance_add').click(function () {
+        if ($('#_substances_add').html() == "") {
+
+            $.ajax({
+                url: "/Records/SubstancesUse/Add?Id="+@Model.MedicalRecordId,
+                type: "GET",
+                dataType: "html",
+                success: function (data) {
+
+                    $("#_substances_add").html(data);
+
+                },
+                complete: function () {
+                    $("form").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse("form");
+
+                }
+            });
+        } else {
+            $('#_substances_add').empty();
+        }
+    });
+</script>
